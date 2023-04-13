@@ -29,12 +29,26 @@ Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/ver
 
 ## Update the model to support NextAuth+Prisma+db
 
-Edit schema.zmodel to add User.password
+use Prisma for NextAuth. following [https://zenstack.dev/docs/get-started/nextjs]()
 
 Edit .env
 Add db URl for Vercel
 
 Edit schema.zmodel to add Bakery, Journey, Waypoint
+
+Regen Prisma model
+
+```
+npx zenstack generate
+```
+
+npx prisma db push
+
+Run local server
+
+```
+npm run dev
+```
 
 ## Starting Postgresql locally
 

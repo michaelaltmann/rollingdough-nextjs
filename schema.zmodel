@@ -4,9 +4,13 @@
 generator client {
     provider = "prisma-client-js"
 }
-
+plugin reactHooks {
+  provider = '@zenstackhq/react'
+  output = "./src/lib/hooks"
+}
 datasource db {
-    provider = "sqlite"
+    //provider = "sqlite"
+    provider = "postgresql"
     // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
@@ -21,7 +25,7 @@ model Bakery {
     description String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-	wayPoint WayPoint[]
+	waypoint Waypoint[]
 }
 
 model Journey {
@@ -30,10 +34,10 @@ model Journey {
     description String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-	wayPoint WayPoint[]
+	waypoint Waypoint[]
 }
 
-model WayPoint {
+model Waypoint {
     id        String   @id @default(cuid())
     name    String
     lat Float
@@ -54,12 +58,12 @@ model Account {
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String?  @db.Text
+    access_token      String?  @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String?  @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -84,6 +88,9 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    @@allow('create,read', true)
+    // only the user can update or delete their own profile
+    @@allow('update,delete', auth() == this)
 }
 
 model VerificationToken {
