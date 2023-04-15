@@ -12,6 +12,7 @@ generator client {
     provider = "prisma-client-js"
 }
 
+/// @@allow('all', true)
 model Bakery {
     id String @id() @default(cuid())
     name String

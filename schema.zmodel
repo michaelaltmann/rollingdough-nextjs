@@ -26,6 +26,7 @@ model Bakery {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 	waypoint Waypoint[]
+    @@allow('all', true)
 }
 
 model Journey {
