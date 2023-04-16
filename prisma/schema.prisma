@@ -24,6 +24,7 @@ model Bakery {
     zenstack_guard Boolean @default(true)
 }
 
+/// @@allow('all', true)
 model Journey {
     id String @id() @default(cuid())
     name String
@@ -34,6 +35,7 @@ model Journey {
     zenstack_guard Boolean @default(true)
 }
 
+/// @@allow('all', true)
 model Waypoint {
     id String @id() @default(cuid())
     name String
