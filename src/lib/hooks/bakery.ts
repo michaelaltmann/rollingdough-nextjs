@@ -131,8 +131,26 @@ export function useBakery() {
             [P in OrderFields]: P extends ByFields
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]>(args: Prisma.SubsetIntersection<T, Prisma.BakeryGroupByArgs, OrderByArg> & InputErrors, options?: RequestOptions<{} extends InputErrors ? Prisma.GetBakeryGroupByPayload<T> : InputErrors>) {
-        return request.get<{} extends InputErrors ? Prisma.GetBakeryGroupByPayload<T> : InputErrors>(`${endpoint}/bakery/groupBy`, args, options);
+        }[OrderFields]>(args: Prisma.SubsetIntersection<T, Prisma.BakeryGroupByArgs, OrderByArg> & InputErrors, options?: RequestOptions<{} extends InputErrors ?
+            Array<Prisma.PickArray<Prisma.BakeryGroupByOutputType, T['by']> &
+                {
+                    [P in ((keyof T) & (keyof Prisma.BakeryGroupByOutputType))]: P extends '_count'
+                    ? T[P] extends boolean
+                    ? number
+                    : Prisma.GetScalarType<T[P], Prisma.BakeryGroupByOutputType[P]>
+                    : Prisma.GetScalarType<T[P], Prisma.BakeryGroupByOutputType[P]>
+                }
+            > : InputErrors>) {
+        return request.get<{} extends InputErrors ?
+            Array<Prisma.PickArray<Prisma.BakeryGroupByOutputType, T['by']> &
+                {
+                    [P in ((keyof T) & (keyof Prisma.BakeryGroupByOutputType))]: P extends '_count'
+                    ? T[P] extends boolean
+                    ? number
+                    : Prisma.GetScalarType<T[P], Prisma.BakeryGroupByOutputType[P]>
+                    : Prisma.GetScalarType<T[P], Prisma.BakeryGroupByOutputType[P]>
+                }
+            > : InputErrors>(`${endpoint}/bakery/groupBy`, args, options);
     }
 
     function count<T extends Prisma.BakeryCountArgs>(args: Prisma.Subset<T, Prisma.BakeryCountArgs>, options?: RequestOptions<T extends { select: any; } ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], Prisma.BakeryCountAggregateOutputType> : number>) {

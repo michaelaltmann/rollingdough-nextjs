@@ -131,8 +131,26 @@ export function useVerificationToken() {
             [P in OrderFields]: P extends ByFields
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]>(args: Prisma.SubsetIntersection<T, Prisma.VerificationTokenGroupByArgs, OrderByArg> & InputErrors, options?: RequestOptions<{} extends InputErrors ? Prisma.GetVerificationTokenGroupByPayload<T> : InputErrors>) {
-        return request.get<{} extends InputErrors ? Prisma.GetVerificationTokenGroupByPayload<T> : InputErrors>(`${endpoint}/verificationToken/groupBy`, args, options);
+        }[OrderFields]>(args: Prisma.SubsetIntersection<T, Prisma.VerificationTokenGroupByArgs, OrderByArg> & InputErrors, options?: RequestOptions<{} extends InputErrors ?
+            Array<Prisma.PickArray<Prisma.VerificationTokenGroupByOutputType, T['by']> &
+                {
+                    [P in ((keyof T) & (keyof Prisma.VerificationTokenGroupByOutputType))]: P extends '_count'
+                    ? T[P] extends boolean
+                    ? number
+                    : Prisma.GetScalarType<T[P], Prisma.VerificationTokenGroupByOutputType[P]>
+                    : Prisma.GetScalarType<T[P], Prisma.VerificationTokenGroupByOutputType[P]>
+                }
+            > : InputErrors>) {
+        return request.get<{} extends InputErrors ?
+            Array<Prisma.PickArray<Prisma.VerificationTokenGroupByOutputType, T['by']> &
+                {
+                    [P in ((keyof T) & (keyof Prisma.VerificationTokenGroupByOutputType))]: P extends '_count'
+                    ? T[P] extends boolean
+                    ? number
+                    : Prisma.GetScalarType<T[P], Prisma.VerificationTokenGroupByOutputType[P]>
+                    : Prisma.GetScalarType<T[P], Prisma.VerificationTokenGroupByOutputType[P]>
+                }
+            > : InputErrors>(`${endpoint}/verificationToken/groupBy`, args, options);
     }
 
     function count<T extends Prisma.VerificationTokenCountArgs>(args: Prisma.Subset<T, Prisma.VerificationTokenCountArgs>, options?: RequestOptions<T extends { select: any; } ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], Prisma.VerificationTokenCountAggregateOutputType> : number>) {

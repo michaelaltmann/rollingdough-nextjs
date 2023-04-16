@@ -131,8 +131,26 @@ export function useWaypoint() {
             [P in OrderFields]: P extends ByFields
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]>(args: Prisma.SubsetIntersection<T, Prisma.WaypointGroupByArgs, OrderByArg> & InputErrors, options?: RequestOptions<{} extends InputErrors ? Prisma.GetWaypointGroupByPayload<T> : InputErrors>) {
-        return request.get<{} extends InputErrors ? Prisma.GetWaypointGroupByPayload<T> : InputErrors>(`${endpoint}/waypoint/groupBy`, args, options);
+        }[OrderFields]>(args: Prisma.SubsetIntersection<T, Prisma.WaypointGroupByArgs, OrderByArg> & InputErrors, options?: RequestOptions<{} extends InputErrors ?
+            Array<Prisma.PickArray<Prisma.WaypointGroupByOutputType, T['by']> &
+                {
+                    [P in ((keyof T) & (keyof Prisma.WaypointGroupByOutputType))]: P extends '_count'
+                    ? T[P] extends boolean
+                    ? number
+                    : Prisma.GetScalarType<T[P], Prisma.WaypointGroupByOutputType[P]>
+                    : Prisma.GetScalarType<T[P], Prisma.WaypointGroupByOutputType[P]>
+                }
+            > : InputErrors>) {
+        return request.get<{} extends InputErrors ?
+            Array<Prisma.PickArray<Prisma.WaypointGroupByOutputType, T['by']> &
+                {
+                    [P in ((keyof T) & (keyof Prisma.WaypointGroupByOutputType))]: P extends '_count'
+                    ? T[P] extends boolean
+                    ? number
+                    : Prisma.GetScalarType<T[P], Prisma.WaypointGroupByOutputType[P]>
+                    : Prisma.GetScalarType<T[P], Prisma.WaypointGroupByOutputType[P]>
+                }
+            > : InputErrors>(`${endpoint}/waypoint/groupBy`, args, options);
     }
 
     function count<T extends Prisma.WaypointCountArgs>(args: Prisma.Subset<T, Prisma.WaypointCountArgs>, options?: RequestOptions<T extends { select: any; } ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], Prisma.WaypointCountAggregateOutputType> : number>) {

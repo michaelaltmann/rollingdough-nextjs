@@ -131,8 +131,26 @@ export function useSession() {
             [P in OrderFields]: P extends ByFields
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]>(args: Prisma.SubsetIntersection<T, Prisma.SessionGroupByArgs, OrderByArg> & InputErrors, options?: RequestOptions<{} extends InputErrors ? Prisma.GetSessionGroupByPayload<T> : InputErrors>) {
-        return request.get<{} extends InputErrors ? Prisma.GetSessionGroupByPayload<T> : InputErrors>(`${endpoint}/session/groupBy`, args, options);
+        }[OrderFields]>(args: Prisma.SubsetIntersection<T, Prisma.SessionGroupByArgs, OrderByArg> & InputErrors, options?: RequestOptions<{} extends InputErrors ?
+            Array<Prisma.PickArray<Prisma.SessionGroupByOutputType, T['by']> &
+                {
+                    [P in ((keyof T) & (keyof Prisma.SessionGroupByOutputType))]: P extends '_count'
+                    ? T[P] extends boolean
+                    ? number
+                    : Prisma.GetScalarType<T[P], Prisma.SessionGroupByOutputType[P]>
+                    : Prisma.GetScalarType<T[P], Prisma.SessionGroupByOutputType[P]>
+                }
+            > : InputErrors>) {
+        return request.get<{} extends InputErrors ?
+            Array<Prisma.PickArray<Prisma.SessionGroupByOutputType, T['by']> &
+                {
+                    [P in ((keyof T) & (keyof Prisma.SessionGroupByOutputType))]: P extends '_count'
+                    ? T[P] extends boolean
+                    ? number
+                    : Prisma.GetScalarType<T[P], Prisma.SessionGroupByOutputType[P]>
+                    : Prisma.GetScalarType<T[P], Prisma.SessionGroupByOutputType[P]>
+                }
+            > : InputErrors>(`${endpoint}/session/groupBy`, args, options);
     }
 
     function count<T extends Prisma.SessionCountArgs>(args: Prisma.Subset<T, Prisma.SessionCountArgs>, options?: RequestOptions<T extends { select: any; } ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], Prisma.SessionCountAggregateOutputType> : number>) {
