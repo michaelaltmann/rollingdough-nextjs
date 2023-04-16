@@ -17,9 +17,9 @@
     "@trpc/next": "^10.18.0",
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
-    "@zenstackhq/next": "^1.0.0-alpha.28",
-    "@zenstackhq/react": "^1.0.0-alpha.28",
-    "@zenstackhq/runtime": "1.0.0-alpha.28",
+    "@zenstackhq/next": "^1.0.0-alpha.102",
+    "@zenstackhq/react": "^1.0.0-alpha.102",
+    "@zenstackhq/runtime": "^1.0.0-alpha.102",
     "next": "^13.2.4",
     "next-auth": "^4.21.0",
     "ra-data-json-server": "^4.9.3",
@@ -43,7 +43,7 @@
     "eslint-config-next": "^13.2.4",
     "prisma": "^4.11.0",
     "typescript": "^5.0.2",
-    "zenstack": "1.0.0-alpha.99"
+    "zenstack": "^1.0.0-alpha.102"
   },
   "ct3aMetadata": {
     "initVersion": "7.10.3"
