@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Container,
   Typography,
 } from "@mui/material";
 import { useBakery } from "~/lib/hooks";
@@ -13,20 +14,34 @@ export default function Bakeries() {
 
   if (bakeries) {
     return (
-      <>
+      <Container sx={{ margin: "3px" }}>
         {bakeries.map((bakery) => {
           return (
-            <Card key={bakery.id}>
-              <CardMedia sx={{ height: 140 }} image="" title="green iguana" />
+            <Card key={bakery.id} sx={{ maxWidth: 345, margin: 3 }}>
+              <CardMedia
+                sx={{ height: 140 }}
+                image={bakery.image || ""}
+                title="bakery item"
+              />
               <CardContent>
                 {" "}
                 <Typography gutterBottom variant="h5" component="div">
                   {bakery.name}
                 </Typography>
-                <Typography gutterBottom component="div">
+                <Typography
+                  gutterBottom
+                  variant="body2"
+                  color="text.primary"
+                  component="div"
+                >
                   {bakery.address}
                 </Typography>
-                <Typography gutterBottom component="div">
+                <Typography
+                  gutterBottom
+                  variant="body2"
+                  color="text.secondary"
+                  component="div"
+                >
                   {bakery.description}
                 </Typography>
               </CardContent>
@@ -37,7 +52,7 @@ export default function Bakeries() {
             </Card>
           );
         })}
-      </>
+      </Container>
     );
   } else {
     return <>Loading ...</>;
