@@ -18,45 +18,36 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Bakery {
+model Place {
     id        String   @id @default(cuid())
     name    String
     address String
     phone String?
     description String
+    category PlaceCategory
     image String?
     lat Float?
     lon Float?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-	waypoint Waypoint[]
+	placeImage PlaceImage[]
     @@allow('all', true)
+}
+enum PlaceCategory {
+  BAKERY
+  MURAL
+  ART
 }
 
-model Journey {
-    id        String   @id @default(cuid())
-    name    String
-    description String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-	waypoint Waypoint[]
-    @@allow('all', true)
+model PlaceImage {
+    id String @id @default(cuid())
+    url String
+    placeId String
+    place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
 }
 
-model Waypoint {
-    id        String   @id @default(cuid())
-    name    String
-    lat Float
-    lon Float
-    bakery_id  String?
-    journey_id String
-    description String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    journey Journey @relation(fields: [journey_id], references: [id], onDelete: Cascade)
-    bakery Bakery? @relation( fields: [bakery_id], references: [id], onDelete: Cascade)
-    @@allow('all', true)
-}
+
+
 
 // Necessary for Next auth
 model Account {

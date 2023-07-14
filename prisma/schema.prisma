@@ -12,46 +12,34 @@ generator client {
     provider = "prisma-client-js"
 }
 
+enum PlaceCategory {
+    BAKERY
+    MURAL
+    ART
+}
+
 /// @@allow('all', true)
-model Bakery {
+model Place {
     id String @id() @default(cuid())
     name String
     address String
     phone String?
     description String
+    category PlaceCategory
     image String?
     lat Float?
     lon Float?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt()
-    waypoint Waypoint[]
+    placeImage PlaceImage[]
     zenstack_guard Boolean @default(true)
 }
 
-/// @@allow('all', true)
-model Journey {
+model PlaceImage {
     id String @id() @default(cuid())
-    name String
-    description String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
-    waypoint Waypoint[]
-    zenstack_guard Boolean @default(true)
-}
-
-/// @@allow('all', true)
-model Waypoint {
-    id String @id() @default(cuid())
-    name String
-    lat Float
-    lon Float
-    bakery_id String?
-    journey_id String
-    description String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
-    journey Journey @relation(fields: [journey_id], references: [id], onDelete: Cascade)
-    bakery Bakery? @relation(fields: [bakery_id], references: [id], onDelete: Cascade)
+    url String
+    placeId String
+    place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
     zenstack_guard Boolean @default(true)
 }
 

@@ -2,6 +2,9 @@
   "name": "rollingdough-nextjs",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "seed": "npx ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "scripts": {
     "build": "zenstack generate && next build",
     "dev": "next dev",
@@ -23,6 +26,7 @@
     "@zenstackhq/next": "^1.0.0-alpha.102",
     "@zenstackhq/react": "^1.0.0-alpha.102",
     "@zenstackhq/runtime": "^1.0.0-alpha.102",
+    "mapbox-gl": "^2.15.0",
     "next": "^13.2.4",
     "next-auth": "^4.21.0",
     "ra-data-json-server": "^4.9.3",
@@ -37,7 +41,8 @@
   },
   "devDependencies": {
     "@types/eslint": "^8.21.3",
-    "@types/node": "^18.15.5",
+    "@types/mapbox-gl": "^2.7.11",
+    "@types/node": "^18.16.19",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
@@ -45,7 +50,8 @@
     "eslint": "^8.36.0",
     "eslint-config-next": "^13.2.4",
     "prisma": "^4.11.0",
-    "typescript": "^5.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6",
     "zenstack": "^1.0.0-alpha.102"
   },
   "ct3aMetadata": {
