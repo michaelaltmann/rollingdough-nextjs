@@ -69,7 +69,7 @@ async function main() {
       },
       {
         id: "laude_bread",
-        name: "laune Bread",
+        name: "Laune Bread",
         address: "3605 E Lake St, Minneapolis, MN 55406",
         lat: 44.94837,
         lon: -93.220058,

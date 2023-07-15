@@ -14,7 +14,6 @@ import PlacesMap from "~/components/PlacesMap";
 import { usePlace } from "~/lib/hooks";
 
 export default function Bakeries() {
-  console.log("Calling usePlace");
   const { data: bakeries } = usePlace().findMany({
     where: { category: PlaceCategory.BAKERY },
   });
