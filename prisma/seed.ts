@@ -7,9 +7,9 @@ async function main() {
       {
         id: "rustica",
         name: "Rustica",
-        address: "123 Main st",
-        lat: 44.88196,
-        lon: -93.32491,
+        address: "3220 W Lake St",
+        lat: 44.949411,
+        lon: -93.3203,
         category: "BAKERY",
         description: "Love the ginger scones",
       },

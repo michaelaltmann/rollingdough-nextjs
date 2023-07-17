@@ -2,8 +2,8 @@ import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loade
 import { useRef, useState, useEffect } from "react";
 import * as React from "react";
 import { Popup } from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import type { Place } from "@prisma/client";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFsdG1hbm4iLCJhIjoiQjgzZTEyNCJ9.0_UJWIO6Up0HkMQajYj6Ew";
@@ -49,9 +49,6 @@ export default function PlacesMap(props: { places: Place[] }) {
   });
 
   return (
-    <React.Fragment>
-      <div>Map of Places</div>
-      <div ref={mapContainer} style={{ height: "800px", width: "1200px" }} />
-    </React.Fragment>
+    <div ref={mapContainer} style={{ height: "800px", width: "1200px" }} />
   );
 }
