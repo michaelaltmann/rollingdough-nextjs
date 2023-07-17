@@ -58,7 +58,7 @@ export default function Bakeries() {
     if (!bakeries) return;
 
     for (const place of bakeries) {
-      console.log(`${place.id} ${place.lat} ${place.lon}`);
+      console.log(`${place.id} ${place.lat || ""} ${place.lon || ""}`);
       if (place.lat != null && place.lon != null) {
         const popUp = new Popup({ closeButton: false, anchor: "left" }).setHTML(
           `<div class="popup">${place.name}</div>`
@@ -76,7 +76,7 @@ export default function Bakeries() {
   function toggleTripPlace(place: Place) {
     const index = tripPlaces.indexOf(place);
     if (index >= 0) {
-      var x = [...tripPlaces];
+      const x = [...tripPlaces];
       x.splice(index, 1);
       setTripPlaces(x);
     } else {
@@ -89,7 +89,7 @@ export default function Bakeries() {
     const features = bakeries
       .filter((place: Place) => place.lat && place.lon)
       .map((place: Place) => {
-        return {
+        const f: GeoJSON.Feature = {
           type: "Feature",
           properties: {
             place_id: place.id,
@@ -97,9 +97,10 @@ export default function Bakeries() {
           },
           geometry: {
             type: "Point",
-            coordinates: [place.lon, place.lat],
+            coordinates: [place.lon || 0, place.lat || 0],
           },
         };
+        return f;
       });
     map.current.addSource("places", {
       type: "geojson",
