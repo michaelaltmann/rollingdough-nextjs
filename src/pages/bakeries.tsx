@@ -94,6 +94,7 @@ export default function Bakeries() {
           properties: {
             place_id: place.id,
             description: place.name,
+            category: place.category,
           },
           geometry: {
             type: "Point",
@@ -116,7 +117,17 @@ export default function Bakeries() {
       source: "places",
       layout: {},
       paint: {
-        "circle-color": "red",
+        "circle-color": [
+          "match",
+          ["get", "category"],
+          "BAKERY",
+          "orange",
+          "MURAL",
+          "blue",
+          "ART",
+          "purple",
+          "gray",
+        ],
       },
     });
     map.current.on("click", "places", (e) => {
@@ -137,7 +148,7 @@ export default function Bakeries() {
           sx={{
             margin: "3px",
             height: "1000px",
-            width: "300px",
+            minWidth: 340,
             overflow: "scroll",
           }}
         >
@@ -146,7 +157,7 @@ export default function Bakeries() {
               <Card
                 key={bakery.id}
                 sx={{
-                  maxWidth: 345,
+                  width: 270,
                   margin: "3px",
                   borderColor: selectedPlace == bakery ? "gray" : "white",
                   borderStyle: "solid",
@@ -198,7 +209,7 @@ export default function Bakeries() {
             style={{ height: "800px", width: "1200px" }}
           />
           <div>
-            Trip
+            <Typography>Trip</Typography>
             <Stack direction="column">
               {tripPlaces.map((place: Place) => {
                 return (
