@@ -76,6 +76,26 @@ async function main() {
         category: "BAKERY",
         description: "European, with an emphasis on whole grains",
       },
+
+      {
+        id: "bryant_square_park",
+        name: "Bryant Square Park",
+        address: "3101 Bryant Ave S, Minneapolis, MN 55408",
+        lat: 44.946161988128104,
+        lon: -93.29042751845597,
+        category: "MURAL",
+        description: "Mirrored mosaic",
+      },
+
+      {
+        id: "lyndale_park_rose_garden",
+        name: "Lyndale Park Rose Garden",
+        address: "4124 Roseway Rd, Minneapolis, MN 55409",
+        lat: 44.927341526203236,
+        lon: -93.29591834402862,
+        category: "ART",
+        description: "Rose garden, CHerry Blossoms, and Japanese Rock Garden",
+      },
     ],
   });
 }

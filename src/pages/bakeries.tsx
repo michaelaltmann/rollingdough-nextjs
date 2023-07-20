@@ -21,10 +21,12 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFsdG1hbm4iLCJhIjoiQjgzZTEyNCJ9.0_UJWIO6Up0HkMQajYj6Ew";
-
+import mbxDirectionsClient from "@mapbox/mapbox-sdk/services/directions";
+import type { DirectionsWaypoint } from "@mapbox/mapbox-sdk/services/directions";
+import { DirectionsProfileExclusion } from "@mapbox/mapbox-sdk/services/directions";
 export default function Bakeries() {
-  const { data: bakeries } = usePlace().findMany({
-    where: { category: PlaceCategory.BAKERY },
+  const { data: places } = usePlace().findMany({
+    // where: { category: PlaceCategory.BAKERY },
   });
 
   const [tripPlaces, setTripPlaces] = useState<Place[]>([]);
@@ -55,9 +57,9 @@ export default function Bakeries() {
 
   function generateMarkers() {
     if (!map.current) return;
-    if (!bakeries) return;
+    if (!places) return;
 
-    for (const place of bakeries) {
+    for (const place of places) {
       console.log(`${place.id} ${place.lat || ""} ${place.lon || ""}`);
       if (place.lat != null && place.lon != null) {
         const popUp = new Popup({ closeButton: false, anchor: "left" }).setHTML(
@@ -83,10 +85,85 @@ export default function Bakeries() {
       setTripPlaces([...tripPlaces, place]);
     }
   }
+  async function generateTripPath() {
+    const exclusions = { profile: "cycling" } as DirectionsProfileExclusion;
+    const options = {
+      waypoints: tripPlaces.map((place) => {
+        return {
+          coordinates: [place.lon || 0, place.lat || 0],
+        } as DirectionsWaypoint;
+      }),
+    };
+    const directionsClient = mbxDirectionsClient({
+      accessToken: mapboxgl.accessToken,
+    });
+    /*directionsClient
+      .getDirections({ ...options, ...exclusions })
+      .send()
+      .then((response) => {
+        const json = response.body;
+        const data = json?.routes[0];
+        const geojson = data?.geometry?.coordinates;
+        if (map.current?.getSource("route")) {
+          map.current?.getSource("route")?.setData(geojson);
+        } else {
+          map.current?.addLayer({
+            id: "route",
+            type: "line",
+            source: {
+              type: "geojson",
+              data: geojson,
+            },
+            layout: {},
+            paint: {
+              "line-color": "green",
+              "line-width": 2,
+            },
+          });
+        }
+      });
+      */
+    const coords = tripPlaces
+      .map((place) => `${place.lon},${place.lat}`)
+      .join(";");
+    const query = await fetch(
+      `https://api.mapbox.com/directions/v5/mapbox/cycling/${coords}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+      { method: "GET" }
+    );
+    const json = await query.json();
+    const data = json.routes[0];
+    const route = data.geometry.coordinates;
+    const geojson = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: route,
+      },
+    };
+    if (map.current?.getSource("route")) {
+      map.current?.getSource("route")?.setData(geojson);
+    } else {
+      map.current?.addLayer({
+        id: "route",
+        type: "line",
+        source: {
+          type: "geojson",
+          data: route,
+        },
+        layout: {},
+        paint: {
+          "line-color": "green",
+          "line-width": 2,
+        },
+      });
+    }
+    // if the route already exists on the map, we'll reset it using setData
+  }
   function generateLayer() {
     if (!map.current) return;
-    if (!bakeries) return;
-    const features = bakeries
+    if (!places) return;
+    const features = places
       .filter((place: Place) => place.lat && place.lon)
       .map((place: Place) => {
         const f: GeoJSON.Feature = {
@@ -117,6 +194,17 @@ export default function Bakeries() {
       source: "places",
       layout: {},
       paint: {
+        "circle-radius": [
+          "match",
+          ["get", "category"],
+          "BAKERY",
+          10,
+          "MURAL",
+          4,
+          "ART",
+          4,
+          4,
+        ],
         "circle-color": [
           "match",
           ["get", "category"],
@@ -134,14 +222,14 @@ export default function Bakeries() {
       const features = e.features;
       if (features) {
         const selected =
-          bakeries.find((x) => x.id === features[0]?.properties?.place_id) ||
+          places.find((x) => x.id === features[0]?.properties?.place_id) ||
           null;
         setSelectedPace(selected);
       }
     });
   }
 
-  if (bakeries) {
+  if (places) {
     return (
       <Stack direction="row">
         <Container
@@ -152,7 +240,7 @@ export default function Bakeries() {
             overflow: "scroll",
           }}
         >
-          {bakeries.map((bakery) => {
+          {places.map((bakery) => {
             return (
               <Card
                 key={bakery.id}
@@ -210,6 +298,9 @@ export default function Bakeries() {
           />
           <div>
             <Typography>Trip</Typography>
+            <Button size="small" onClick={() => generateTripPath()}>
+              Route{" "}
+            </Button>
             <Stack direction="column">
               {tripPlaces.map((place: Place) => {
                 return (

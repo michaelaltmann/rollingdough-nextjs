@@ -40,7 +40,9 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@mapbox/mapbox-sdk": "^0.15.2",
     "@types/eslint": "^8.21.3",
+    "@types/mapbox__mapbox-sdk": "^0.13.4",
     "@types/mapbox-gl": "^2.7.11",
     "@types/node": "^18.16.19",
     "@types/react": "^18.0.28",
