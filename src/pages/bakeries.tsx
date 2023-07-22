@@ -10,9 +10,9 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Place, PlaceCategory } from "@prisma/client";
+import { Place } from "@prisma/client";
 import { usePlace } from "~/lib/hooks";
-import mapboxgl, { MapLayerTouchEvent, MapMouseEvent } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl, { GeoJSONSource, MapMouseEvent } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { useRef, useState, useEffect } from "react";
 import * as React from "react";
 import { Popup } from "mapbox-gl";
@@ -85,8 +85,17 @@ export default function Bakeries() {
       setTripPlaces([...tripPlaces, place]);
     }
   }
+  async function typedRequest<TResponse>(
+    url: string,
+    config: RequestInit
+  ): Promise<TResponse> {
+    const response = await fetch(url, config);
+    return (await response.json()) as Promise<TResponse>;
+  }
+
   async function generateTripPath() {
-    const exclusions = { profile: "cycling" } as DirectionsProfileExclusion;
+    /*
+        const exclusions = { profile: "cycling" } as DirectionsProfileExclusion;
     const options = {
       waypoints: tripPlaces.map((place) => {
         return {
@@ -97,7 +106,7 @@ export default function Bakeries() {
     const directionsClient = mbxDirectionsClient({
       accessToken: mapboxgl.accessToken,
     });
-    /*directionsClient
+    directionsClient
       .getDirections({ ...options, ...exclusions })
       .send()
       .then((response) => {
@@ -124,32 +133,35 @@ export default function Bakeries() {
       });
       */
     const coords = tripPlaces
-      .map((place) => `${place.lon},${place.lat}`)
+      .map((place) => `${place.lon || 0},${place.lat || 0}`)
       .join(";");
-    const query = await fetch(
-      `https://api.mapbox.com/directions/v5/mapbox/cycling/${coords}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
-      { method: "GET" }
-    );
-    const json = await query.json();
-    const data = json.routes[0];
-    const route = data.geometry.coordinates;
+    const url = `https://api.mapbox.com/directions/v5/mapbox/cycling/${coords}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`;
+
+    type JSONResponse = {
+      data: { routes: Array<{ geometry: { coordinates: Array<number[]> } }> };
+    };
+    const { data }: JSONResponse = await typedRequest<JSONResponse>(url, {
+      method: "GET",
+    });
+    const route = data.routes[0];
+    const coordinates = route?.geometry?.coordinates;
     const geojson = {
       type: "Feature",
       properties: {},
       geometry: {
         type: "LineString",
-        coordinates: route,
+        coordinates: coordinates,
       },
-    };
+    } as GeoJSON.Feature<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>;
     if (map.current?.getSource("route")) {
-      map.current?.getSource("route")?.setData(geojson);
+      (map.current?.getSource("route") as GeoJSONSource)?.setData(geojson);
     } else {
       map.current?.addLayer({
         id: "route",
         type: "line",
         source: {
           type: "geojson",
-          data: route,
+          data: geojson,
         },
         layout: {},
         paint: {
