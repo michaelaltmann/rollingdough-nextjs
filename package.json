@@ -58,15 +58,5 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.10.3"
-  },
-  "eslintConfig": {
-    "@typescript-eslint/no-misused-promises": [
-      "error",
-      {
-        "checksVoidReturn": {
-          "arguments": false
-        }
-      }
-    ]
   }
 }

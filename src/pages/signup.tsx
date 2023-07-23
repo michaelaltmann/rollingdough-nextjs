@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type { NextPage } from "next";
 import { signIn } from "next-auth/react";
 import Router from "next/router";
