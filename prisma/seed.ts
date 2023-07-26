@@ -2,6 +2,7 @@ import { PlaceCategory, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 async function main() {
   await prisma.place.deleteMany();
+
   await prisma.place.createMany({
     data: [
       {
@@ -95,6 +96,22 @@ async function main() {
         lon: -93.29591834402862,
         category: "ART",
         description: "Rose garden, CHerry Blossoms, and Japanese Rock Garden",
+      },
+    ],
+  });
+  await prisma.placeImage.createMany({
+    data: [
+      {
+        placeId: "rustica",
+        url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
+      },
+      {
+        placeId: "black_walnut",
+        url: "https://i0.wp.com/www.twincities.com/wp-content/uploads/2020/01/BlackWalnutBakery11072019Ngolemontart.jpg?fit=780%2C9999px&ssl=1",
+      },
+      {
+        placeId: "bryant_square_park",
+        url: "https://www.minneapolisparks.org/wp-content/uploads/2018/11/Bryant-Square-Mosaic-Unveiling_2.jpg",
       },
     ],
   });

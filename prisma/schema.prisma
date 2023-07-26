@@ -35,6 +35,7 @@ model Place {
     zenstack_guard Boolean @default(true)
 }
 
+/// @@allow('all', true)
 model PlaceImage {
     id String @id() @default(cuid())
     url String

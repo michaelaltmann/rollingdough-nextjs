@@ -27,6 +27,9 @@ import { DirectionsProfileExclusion } from "@mapbox/mapbox-sdk/services/directio
 export default function Bakeries() {
   const { data: places } = usePlace().findMany({
     // where: { category: PlaceCategory.BAKERY },
+    include: {
+      placeImage: true,
+    },
   });
 
   const [tripPlaces, setTripPlaces] = useState<Place[]>([]);
@@ -138,12 +141,13 @@ export default function Bakeries() {
     const url = `https://api.mapbox.com/directions/v5/mapbox/cycling/${coords}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`;
 
     type JSONResponse = {
-      data: { routes: Array<{ geometry: { coordinates: Array<number[]> } }> };
+      routes: Array<{ geometry: { coordinates: Array<number[]> } }>;
     };
-    const { data }: JSONResponse = await typedRequest<JSONResponse>(url, {
+
+    const { routes }: JSONResponse = await typedRequest<JSONResponse>(url, {
       method: "GET",
     });
-    const route = data.routes[0];
+    const route = routes[0];
     const coordinates = route?.geometry?.coordinates;
     const geojson = {
       type: "Feature",
@@ -265,7 +269,7 @@ export default function Bakeries() {
               >
                 <CardMedia
                   sx={{ height: 140 }}
-                  image={bakery.image || ""}
+                  image={bakery.placeImage[0]?.url || ""}
                   title="bakery item"
                 />
                 <CardContent>
@@ -309,22 +313,32 @@ export default function Bakeries() {
             style={{ height: "800px", width: "1200px" }}
           />
           <div>
-            <Typography>Trip</Typography>
-            <Button size="small" onClick={() => generateTripPath()}>
-              Route{" "}
-            </Button>
-            <Stack direction="column">
-              {tripPlaces.map((place: Place) => {
-                return (
-                  <Paper key={place.id} sx={{ margin: 1 }}>
-                    {place.name}{" "}
-                    <Button size="small" onClick={() => toggleTripPlace(place)}>
-                      <RemoveCircleOutlineIcon />
-                    </Button>
-                  </Paper>
-                );
-              })}
-            </Stack>
+            {tripPlaces?.length ? (
+              <>
+                <Button size="small" onClick={() => generateTripPath()}>
+                  Build Route{" "}
+                </Button>
+                <Stack direction="column">
+                  {tripPlaces.map((place: Place) => {
+                    return (
+                      <Paper key={place.id} sx={{ margin: 1 }}>
+                        {place.name}{" "}
+                        <Button
+                          size="small"
+                          onClick={() => toggleTripPlace(place)}
+                        >
+                          <RemoveCircleOutlineIcon />
+                        </Button>
+                      </Paper>
+                    );
+                  })}
+                </Stack>
+              </>
+            ) : (
+              <Typography sx={{ alignContent: "center" }}>
+                Select Places to Visit
+              </Typography>
+            )}
           </div>
         </Stack>
       </Stack>
