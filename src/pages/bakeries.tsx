@@ -24,6 +24,8 @@ mapboxgl.accessToken =
 import mbxDirectionsClient from "@mapbox/mapbox-sdk/services/directions";
 import type { DirectionsWaypoint } from "@mapbox/mapbox-sdk/services/directions";
 import { DirectionsProfileExclusion } from "@mapbox/mapbox-sdk/services/directions";
+import { TripPlaces } from "../components/TripPlaces";
+
 export default function Bakeries() {
   const { data: places } = usePlace().findMany({
     // where: { category: PlaceCategory.BAKERY },
@@ -318,21 +320,11 @@ export default function Bakeries() {
                 <Button size="small" onClick={() => generateTripPath()}>
                   Build Route{" "}
                 </Button>
-                <Stack direction="column">
-                  {tripPlaces.map((place: Place) => {
-                    return (
-                      <Paper key={place.id} sx={{ margin: 1 }}>
-                        {place.name}{" "}
-                        <Button
-                          size="small"
-                          onClick={() => toggleTripPlace(place)}
-                        >
-                          <RemoveCircleOutlineIcon />
-                        </Button>
-                      </Paper>
-                    );
-                  })}
-                </Stack>
+                <TripPlaces
+                  tripPlaces={tripPlaces}
+                  setTripPlaces={setTripPlaces}
+                  toggleTripPlace={toggleTripPlace}
+                />
               </>
             ) : (
               <Typography sx={{ alignContent: "center" }}>
