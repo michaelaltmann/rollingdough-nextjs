@@ -54,8 +54,7 @@ async function importPhotos() {
     const title = file.substring(0, file.indexOf('.'))
     return {
       id: title,
-      name: file,
-      title: title,
+      name: title,
       address: "",
       description: "",
       category: "ART",
