@@ -18,12 +18,9 @@ import * as React from "react";
 import { Popup } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFsdG1hbm4iLCJhIjoiQjgzZTEyNCJ9.0_UJWIO6Up0HkMQajYj6Ew";
-import mbxDirectionsClient from "@mapbox/mapbox-sdk/services/directions";
-import type { DirectionsWaypoint } from "@mapbox/mapbox-sdk/services/directions";
-import { DirectionsProfileExclusion } from "@mapbox/mapbox-sdk/services/directions";
+
 import { TripPlaces } from "../components/TripPlaces";
 
 export default function Bakeries() {
@@ -40,6 +37,12 @@ export default function Bakeries() {
   const map = useRef<mapboxgl.Map | null>(null);
   const [lng, setLng] = useState(-93.26);
   const [lat, setLat] = useState(44.95);
+  const refs = useRef<Map<string, any> | null>(null);
+
+  function getRefs() {
+    if (!refs.current) refs.current = new Map();
+    return refs.current;
+  }
   useEffect(() => {
     if (map.current) return; // initialize map only once
     if (!mapContainer.current) return;
@@ -50,22 +53,17 @@ export default function Bakeries() {
       zoom: 12,
     });
     map.current.on("load", () => generateLayer());
-    map.current.on("click", (e) => handleClick(e));
     return () => {
       map.current?.off("load", generateLayer);
     };
   });
-
-  function handleClick(e: MapMouseEvent) {
-    console.log(e);
-  }
 
   function generateMarkers() {
     if (!map.current) return;
     if (!places) return;
 
     for (const place of places) {
-      console.log(`${place.id} ${place.lat || ""} ${place.lon || ""}`);
+      //      console.log(`${place.id} ${place.lat || ""} ${place.lon || ""}`);
       if (place.lat != null && place.lon != null) {
         const popUp = new Popup({ closeButton: false, anchor: "left" }).setHTML(
           `<div class="popup">${place.name}</div>`
@@ -99,44 +97,6 @@ export default function Bakeries() {
   }
 
   async function generateTripPath() {
-    /*
-        const exclusions = { profile: "cycling" } as DirectionsProfileExclusion;
-    const options = {
-      waypoints: tripPlaces.map((place) => {
-        return {
-          coordinates: [place.lon || 0, place.lat || 0],
-        } as DirectionsWaypoint;
-      }),
-    };
-    const directionsClient = mbxDirectionsClient({
-      accessToken: mapboxgl.accessToken,
-    });
-    directionsClient
-      .getDirections({ ...options, ...exclusions })
-      .send()
-      .then((response) => {
-        const json = response.body;
-        const data = json?.routes[0];
-        const geojson = data?.geometry?.coordinates;
-        if (map.current?.getSource("route")) {
-          map.current?.getSource("route")?.setData(geojson);
-        } else {
-          map.current?.addLayer({
-            id: "route",
-            type: "line",
-            source: {
-              type: "geojson",
-              data: geojson,
-            },
-            layout: {},
-            paint: {
-              "line-color": "green",
-              "line-width": 2,
-            },
-          });
-        }
-      });
-      */
     const coords = tripPlaces
       .map((place) => `${place.lon || 0},${place.lat || 0}`)
       .join(";");
@@ -171,8 +131,9 @@ export default function Bakeries() {
         },
         layout: {},
         paint: {
-          "line-color": "green",
-          "line-width": 2,
+          "line-color": "blue",
+          "line-opacity": 0.5,
+          "line-width": 6,
         },
       });
     }
@@ -218,10 +179,10 @@ export default function Bakeries() {
           "BAKERY",
           10,
           "MURAL",
-          4,
+          6,
           "ART",
-          4,
-          4,
+          6,
+          6,
         ],
         "circle-color": [
           "match",
@@ -229,7 +190,7 @@ export default function Bakeries() {
           "BAKERY",
           "orange",
           "MURAL",
-          "blue",
+          "green",
           "ART",
           "purple",
           "gray",
@@ -239,10 +200,15 @@ export default function Bakeries() {
     map.current.on("click", "places", (e) => {
       const features = e.features;
       if (features) {
-        const selected =
-          places.find((x) => x.id === features[0]?.properties?.place_id) ||
-          null;
+        const place_id = features[0]?.properties?.place_id;
+        const selected = places.find((x) => x.id === place_id) || null;
         setSelectedPace(selected);
+        const map = getRefs();
+        const node = map.get(place_id);
+        node?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       }
     });
   }
@@ -267,6 +233,14 @@ export default function Bakeries() {
                   margin: "3px",
                   borderColor: selectedPlace == bakery ? "gray" : "white",
                   borderStyle: "solid",
+                }}
+                ref={(node) => {
+                  const map = getRefs();
+                  if (node) {
+                    map.set(bakery.id, node);
+                  } else {
+                    map.delete(bakery.id);
+                  }
                 }}
               >
                 <CardMedia
@@ -297,13 +271,11 @@ export default function Bakeries() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  {tripPlaces.includes(bakery) ? (
-                    ""
-                  ) : (
+                  <Button disabled={tripPlaces.includes(bakery)}>
                     <AddCircleOutlineIcon
                       onClick={() => toggleTripPlace(bakery)}
                     />
-                  )}
+                  </Button>
                 </CardActions>
               </Card>
             );

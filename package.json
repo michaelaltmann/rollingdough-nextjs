@@ -27,6 +27,7 @@
     "@zenstackhq/next": "^1.0.0-alpha.102",
     "@zenstackhq/react": "^1.0.0-alpha.102",
     "@zenstackhq/runtime": "^1.0.0-alpha.102",
+    "exifreader": "^4.13.0",
     "mapbox-gl": "^2.15.0",
     "next": "^13.2.4",
     "next-auth": "^4.21.0",
