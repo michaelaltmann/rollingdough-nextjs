@@ -1,8 +1,8 @@
 import { Button, Paper } from "@mui/material";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
-
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 // @ts-ignore
 export function TripPlace(props) {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -15,17 +15,17 @@ export function TripPlace(props) {
   };
 
   return (
-    <div
-      key={place.id}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-    >
+    <div key={place.id} ref={setNodeRef} style={style}>
       <Paper sx={{ margin: 1 }}>
+        <DragIndicatorIcon {...attributes} {...listeners}></DragIndicatorIcon>
         {place.name}
-        <Button size="small" onClick={() => toggleTripPlace(place)}>
-          <RemoveCircleOutlineIcon />
+        <Button size="small">
+          <HighlightOffOutlinedIcon
+            onClick={() => {
+              console.log("toggling");
+              toggleTripPlace(place);
+            }}
+          />
         </Button>
       </Paper>
     </div>

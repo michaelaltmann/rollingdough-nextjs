@@ -81,10 +81,12 @@ export default function Bakeries() {
   function toggleTripPlace(place: Place) {
     const index = tripPlaces.indexOf(place);
     if (index >= 0) {
+      console.log("removing " + place.id);
       const x = [...tripPlaces];
       x.splice(index, 1);
       setTripPlaces(x);
     } else {
+      console.log("adding " + place.id);
       setTripPlaces([...tripPlaces, place]);
     }
   }
@@ -177,7 +179,7 @@ export default function Bakeries() {
           "match",
           ["get", "category"],
           "BAKERY",
-          10,
+          12,
           "MURAL",
           6,
           "ART",
