@@ -10,6 +10,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+
 import { Place } from "@prisma/client";
 import { usePlace } from "~/lib/hooks";
 import mapboxgl, { GeoJSONSource, MapMouseEvent } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
@@ -39,6 +41,56 @@ export default function Bakeries() {
   const [lat, setLat] = useState(44.95);
   const refs = useRef<Map<string, any> | null>(null);
 
+  const generateTripPath = React.useCallback(async () => {
+    console.log(`trip places ${JSON.stringify(tripPlaces)}`);
+    var coordinates;
+    if (tripPlaces && tripPlaces.length > 1) {
+      const coords = tripPlaces
+        .map((place) => `${place.lon || 0},${place.lat || 0}`)
+        .join(";");
+      const url = `https://api.mapbox.com/directions/v5/mapbox/cycling/${coords}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`;
+
+      type JSONResponse = {
+        routes: Array<{ geometry: { coordinates: Array<number[]> } }>;
+      };
+
+      const { routes }: JSONResponse = await typedRequest<JSONResponse>(url, {
+        method: "GET",
+      });
+
+      coordinates = routes[0]?.geometry?.coordinates;
+    } else {
+      coordinates = [];
+    }
+    const geojson = {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: coordinates,
+      },
+    } as GeoJSON.Feature<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>;
+    if (map.current?.getSource("route")) {
+      (map.current?.getSource("route") as GeoJSONSource)?.setData(geojson);
+    } else {
+      map.current?.addLayer({
+        id: "route",
+        type: "line",
+        source: {
+          type: "geojson",
+          data: geojson,
+        },
+        layout: {},
+        paint: {
+          "line-color": "blue",
+          "line-opacity": 0.5,
+          "line-width": 6,
+        },
+      });
+    }
+
+    // if the route already exists on the map, we'll reset it using setData
+  }, [tripPlaces]);
   function getRefs() {
     if (!refs.current) refs.current = new Map();
     return refs.current;
@@ -57,6 +109,9 @@ export default function Bakeries() {
       map.current?.off("load", generateLayer);
     };
   });
+  useEffect(() => {
+    generateTripPath();
+  }, [generateTripPath]);
 
   function generateMarkers() {
     if (!map.current) return;
@@ -98,49 +153,6 @@ export default function Bakeries() {
     return (await response.json()) as Promise<TResponse>;
   }
 
-  async function generateTripPath() {
-    const coords = tripPlaces
-      .map((place) => `${place.lon || 0},${place.lat || 0}`)
-      .join(";");
-    const url = `https://api.mapbox.com/directions/v5/mapbox/cycling/${coords}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`;
-
-    type JSONResponse = {
-      routes: Array<{ geometry: { coordinates: Array<number[]> } }>;
-    };
-
-    const { routes }: JSONResponse = await typedRequest<JSONResponse>(url, {
-      method: "GET",
-    });
-    const route = routes[0];
-    const coordinates = route?.geometry?.coordinates;
-    const geojson = {
-      type: "Feature",
-      properties: {},
-      geometry: {
-        type: "LineString",
-        coordinates: coordinates,
-      },
-    } as GeoJSON.Feature<GeoJSON.Geometry, GeoJSON.GeoJsonProperties>;
-    if (map.current?.getSource("route")) {
-      (map.current?.getSource("route") as GeoJSONSource)?.setData(geojson);
-    } else {
-      map.current?.addLayer({
-        id: "route",
-        type: "line",
-        source: {
-          type: "geojson",
-          data: geojson,
-        },
-        layout: {},
-        paint: {
-          "line-color": "blue",
-          "line-opacity": 0.5,
-          "line-width": 6,
-        },
-      });
-    }
-    // if the route already exists on the map, we'll reset it using setData
-  }
   function generateLayer() {
     if (!map.current) return;
     if (!places) return;
@@ -273,39 +285,50 @@ export default function Bakeries() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button disabled={tripPlaces.includes(bakery)}>
-                    <AddCircleOutlineIcon
-                      onClick={() => toggleTripPlace(bakery)}
-                    />
-                  </Button>
+                  {tripPlaces.includes(bakery) ? (
+                    <Button size="small">
+                      <HighlightOffOutlinedIcon
+                        onClick={() => toggleTripPlace(bakery)}
+                      />{" "}
+                    </Button>
+                  ) : (
+                    <Button>
+                      <AddCircleOutlineIcon
+                        onClick={() => toggleTripPlace(bakery)}
+                      />
+                    </Button>
+                  )}
                 </CardActions>
               </Card>
             );
           })}
         </Container>
+
         <Stack direction="column">
           <div
             ref={mapContainer}
             style={{ height: "800px", width: "1200px" }}
           />
-          <div>
-            {tripPlaces?.length ? (
-              <>
-                <Button size="small" onClick={() => generateTripPath()}>
-                  Build Route{" "}
-                </Button>
-                <TripPlaces
-                  tripPlaces={tripPlaces}
-                  setTripPlaces={setTripPlaces}
-                  toggleTripPlace={toggleTripPlace}
-                />
-              </>
-            ) : (
-              <Typography sx={{ alignContent: "center" }}>
-                Select Places to Visit
-              </Typography>
-            )}
-          </div>
+          {false && (
+            <div>
+              {tripPlaces?.length ? (
+                <>
+                  <Button size="small" onClick={() => generateTripPath()}>
+                    Build Route{" "}
+                  </Button>
+                  <TripPlaces
+                    tripPlaces={tripPlaces}
+                    setTripPlaces={setTripPlaces}
+                    toggleTripPlace={toggleTripPlace}
+                  />
+                </>
+              ) : (
+                <Typography sx={{ alignContent: "center" }}>
+                  Select Places to Visit
+                </Typography>
+              )}
+            </div>
+          )}
         </Stack>
       </Stack>
     );
