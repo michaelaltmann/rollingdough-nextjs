@@ -99,7 +99,7 @@ async function main() {
       },
       {
         id: "what_will_you_do",
-        name: "What Will You Do",
+        name: "What Will You Do?",
         address: "3101 Bryant Ave S, Minneapolis, MN 55408",
         lat: 44.9556167,
         lon: -93.2772139,
@@ -147,17 +147,8 @@ async function main() {
         description: "",
       },
       {
-        id: "IMG_2465",
-        name: "IMG_2465",
-        address: "",
-        description: "",
-        category: "ART",
-        lat: 44.946124999999995,
-        lon: -93.29050555555555,
-      },
-      {
         id: "IMG_4942",
-        name: "IMG_4942",
+        name: "VOTE: John Louis",
         address: "",
         description: "",
         category: "ART",
@@ -175,7 +166,7 @@ async function main() {
       },
       {
         id: "IMG_5073",
-        name: "IMG_5073",
+        name: "Love to All",
         address: "",
         description: "",
         category: "ART",
@@ -184,7 +175,7 @@ async function main() {
       },
       {
         id: "IMG_5074",
-        name: "IMG_5074",
+        name: "You Can't Separate Peace",
         address: "",
         description: "",
         category: "ART",
@@ -199,15 +190,6 @@ async function main() {
         category: "ART",
         lat: 44.948477777777775,
         lon: -93.26288611111111,
-      },
-      {
-        id: "IMG_5339",
-        name: "IMG_5339",
-        address: "",
-        description: "",
-        category: "ART",
-        lat: 44.95561666666667,
-        lon: -93.2772138888889,
       },
       {
         id: "IMG_7997",

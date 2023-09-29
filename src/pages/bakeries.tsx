@@ -6,6 +6,8 @@ import {
   CardMedia,
   Container,
   Icon,
+  ImageList,
+  ImageListItem,
   Paper,
   Stack,
   Typography,
@@ -13,6 +15,7 @@ import {
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
 
 import { Place } from "@prisma/client";
+import { PlaceImage } from "@prisma/client";
 import { usePlace } from "~/lib/hooks";
 import mapboxgl, { GeoJSONSource, MapMouseEvent } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { useRef, useState, useEffect } from "react";
@@ -23,23 +26,26 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFsdG1hbm4iLCJhIjoiQjgzZTEyNCJ9.0_UJWIO6Up0HkMQajYj6Ew";
 
-import { TripPlaces } from "../components/TripPlaces";
-
+import useEmblaCarousel from "embla-carousel-react";
 export default function Bakeries() {
   const { data: places } = usePlace().findMany({
     // where: { category: PlaceCategory.BAKERY },
+    orderBy: [{ lon: "asc" }],
     include: {
       placeImage: true,
     },
   });
 
   const [tripPlaces, setTripPlaces] = useState<Place[]>([]);
-  const [selectedPlace, setSelectedPace] = useState<Place | null>(null);
+  const [selectedPlaceIndex, setSelectedPlaceIndex] = useState<number | null>(
+    null
+  );
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [lng, setLng] = useState(-93.26);
   const [lat, setLat] = useState(44.95);
   const refs = useRef<Map<string, any> | null>(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel();
 
   const generateTripPath = React.useCallback(async () => {
     console.log(`trip places ${JSON.stringify(tripPlaces)}`);
@@ -113,6 +119,10 @@ export default function Bakeries() {
     generateTripPath();
   }, [generateTripPath]);
 
+  useEffect(() => {
+    if (selectedPlaceIndex != null) emblaApi?.scrollTo(selectedPlaceIndex);
+  }, [selectedPlaceIndex, emblaApi]);
+
   function generateMarkers() {
     if (!map.current) return;
     if (!places) return;
@@ -158,10 +168,11 @@ export default function Bakeries() {
     if (!places) return;
     const features = places
       .filter((place: Place) => place.lat && place.lon)
-      .map((place: Place) => {
+      .map((place: Place, index: number) => {
         const f: GeoJSON.Feature = {
           type: "Feature",
           properties: {
+            index: index,
             place_id: place.id,
             description: place.name,
             category: place.category,
@@ -215,124 +226,107 @@ export default function Bakeries() {
       const features = e.features;
       if (features) {
         const place_id = features[0]?.properties?.place_id;
-        const selected = places.find((x) => x.id === place_id) || null;
-        setSelectedPace(selected);
-        const map = getRefs();
+        const index = features[0]?.properties?.index;
+        setSelectedPlaceIndex(index);
+
+        /*const map = getRefs();
         const node = map.get(place_id);
         node?.scrollIntoView({
           behavior: "smooth",
           block: "start",
         });
+        */
       }
     });
   }
-
-  if (places) {
+  function buildSlide(bakery: Place & { placeImage: PlaceImage[] }, i: number) {
     return (
-      <Stack direction="row">
-        <Container
-          sx={{
-            margin: "3px",
-            height: "1000px",
-            minWidth: 340,
-            overflow: "scroll",
-          }}
-        >
-          {places.map((bakery) => {
-            return (
-              <Card
-                key={bakery.id}
-                sx={{
-                  width: 270,
-                  margin: "3px",
-                  borderColor: selectedPlace == bakery ? "gray" : "white",
-                  borderStyle: "solid",
-                }}
-                ref={(node) => {
-                  const map = getRefs();
-                  if (node) {
-                    map.set(bakery.id, node);
-                  } else {
-                    map.delete(bakery.id);
-                  }
-                }}
-              >
-                <CardMedia
-                  sx={{ height: 140 }}
-                  image={bakery.placeImage[0]?.url || ""}
-                  title="bakery item"
-                />
-                <CardContent>
-                  {" "}
-                  <Typography gutterBottom variant="h5" component="div">
-                    {bakery.name}
-                  </Typography>
-                  <Typography
-                    gutterBottom
-                    variant="body2"
-                    color="text.primary"
-                    component="div"
-                  >
-                    {bakery.address}
-                  </Typography>
-                  <Typography
-                    gutterBottom
-                    variant="body2"
-                    color="text.secondary"
-                    component="div"
-                  >
-                    {bakery.description}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  {tripPlaces.includes(bakery) ? (
-                    <Button size="small">
-                      <HighlightOffOutlinedIcon
-                        onClick={() => toggleTripPlace(bakery)}
-                      />{" "}
-                    </Button>
-                  ) : (
-                    <Button>
-                      <AddCircleOutlineIcon
-                        onClick={() => toggleTripPlace(bakery)}
-                      />
-                    </Button>
-                  )}
-                </CardActions>
-              </Card>
-            );
-          })}
-        </Container>
-
-        <Stack direction="column">
-          <div
-            ref={mapContainer}
-            style={{ height: "800px", width: "1200px" }}
-          />
-          {false && (
-            <div>
-              {tripPlaces?.length ? (
-                <>
-                  <Button size="small" onClick={() => generateTripPath()}>
-                    Build Route{" "}
-                  </Button>
-                  <TripPlaces
-                    tripPlaces={tripPlaces}
-                    setTripPlaces={setTripPlaces}
-                    toggleTripPlace={toggleTripPlace}
-                  />
-                </>
-              ) : (
-                <Typography sx={{ alignContent: "center" }}>
-                  Select Places to Visit
-                </Typography>
-              )}
-            </div>
+      <Card
+        key={bakery.id}
+        sx={{
+          flex: "0 0 100%",
+          minWidth: 0,
+          width: "270px",
+          height: "380px",
+          borderColor: selectedPlaceIndex == i ? "gray" : "white",
+          borderStyle: "solid",
+        }}
+        ref={(node) => {
+          const map = getRefs();
+          if (node) {
+            map.set(bakery.id, node);
+          } else {
+            map.delete(bakery.id);
+          }
+        }}
+      >
+        <CardMedia
+          sx={{ height: 200, width: 360 }}
+          image={bakery.placeImage[0]?.url || ""}
+          title="bakery item"
+        />
+        <CardContent>
+          {" "}
+          <Typography gutterBottom variant="h5" component="div">
+            {bakery.name} {i}
+          </Typography>
+          <Typography
+            gutterBottom
+            variant="body2"
+            color="text.primary"
+            component="div"
+          >
+            {bakery.address}
+          </Typography>
+          <Typography
+            gutterBottom
+            variant="body2"
+            color="text.secondary"
+            component="div"
+          >
+            {bakery.description}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          {tripPlaces.includes(bakery) ? (
+            <Button size="small">
+              <HighlightOffOutlinedIcon
+                onClick={() => toggleTripPlace(bakery)}
+              />{" "}
+            </Button>
+          ) : (
+            <Button>
+              <AddCircleOutlineIcon onClick={() => toggleTripPlace(bakery)} />
+            </Button>
           )}
-        </Stack>
+        </CardActions>
+      </Card>
+    );
+  }
+
+  const carouselFragment = (
+    <div className="embla" ref={emblaRef}>
+      <div className="embla__container">
+        {(places || []).map((bakery, i) => {
+          return buildSlide(bakery, i);
+        })}
+      </div>
+    </div>
+  );
+
+  if (places)
+    return (
+      <Stack direction="column">
+        <div
+          id="mapcontainer"
+          ref={mapContainer}
+          style={{ height: "400px", width: "100%" }}
+        />
+
+        <div>{carouselFragment}</div>
       </Stack>
     );
-  } else {
-    return <>Loading ...</>;
+  else {
+    return <div>Loading ...</div>;
   }
 }
