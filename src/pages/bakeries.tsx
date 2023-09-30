@@ -268,7 +268,7 @@ export default function Bakeries() {
         <CardContent>
           {" "}
           <Typography gutterBottom variant="h5" component="div">
-            {bakery.name} {i}
+            {bakery.name}
           </Typography>
           <Typography
             gutterBottom
@@ -320,7 +320,7 @@ export default function Bakeries() {
         <div
           id="mapcontainer"
           ref={mapContainer}
-          style={{ height: "400px", width: "100%" }}
+          style={{ height: "350px", width: "100%" }}
         />
 
         <div>{carouselFragment}</div>

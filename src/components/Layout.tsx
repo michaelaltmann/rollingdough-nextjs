@@ -30,11 +30,7 @@ function Header() {
   );
 }
 function Footer() {
-  return (
-    <div className="bg-teal-500 text-center text-white">
-      Copyright 2023 Michael Altmann
-    </div>
-  );
+  return <div className="bg-teal-500 text-center text-white"></div>;
 }
 export default function Layout({ children }: any) {
   return (
