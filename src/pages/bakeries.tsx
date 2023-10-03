@@ -18,7 +18,7 @@ import { Place } from "@prisma/client";
 import { PlaceImage } from "@prisma/client";
 import { usePlace } from "~/lib/hooks";
 import mapboxgl, { GeoJSONSource, MapMouseEvent } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import * as React from "react";
 import { Popup } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -27,6 +27,7 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoibWFsdG1hbm4iLCJhIjoiQjgzZTEyNCJ9.0_UJWIO6Up0HkMQajYj6Ew";
 
 import useEmblaCarousel from "embla-carousel-react";
+import { Feature, GeoJsonProperties, Geometry } from "geojson";
 export default function Bakeries() {
   const { data: places } = usePlace().findMany({
     // where: { category: PlaceCategory.BAKERY },
@@ -46,6 +47,16 @@ export default function Bakeries() {
   const [lat, setLat] = useState(44.95);
   const refs = useRef<Map<string, any> | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel();
+
+  const onSelect = useCallback((emblaApi, eventName: string) => {
+    console.log(`Embla just triggered ${eventName}!`);
+    const indexes: number[] = emblaApi.slidesInView();
+    setSelectedPlaceIndex(indexes[0]);
+  }, []);
+
+  useEffect(() => {
+    if (emblaApi) emblaApi.on("select", onSelect);
+  }, [emblaApi, onSelect]);
 
   const generateTripPath = React.useCallback(async () => {
     console.log(`trip places ${JSON.stringify(tripPlaces)}`);
@@ -120,8 +131,51 @@ export default function Bakeries() {
   }, [generateTripPath]);
 
   useEffect(() => {
-    if (selectedPlaceIndex != null) emblaApi?.scrollTo(selectedPlaceIndex);
-  }, [selectedPlaceIndex, emblaApi]);
+    if (!map.current) return;
+    let features: Feature<Geometry, GeoJsonProperties>[] = [];
+    if (selectedPlaceIndex != null) {
+      emblaApi?.scrollTo(selectedPlaceIndex);
+      const index = selectedPlaceIndex;
+      const place = places ? places[index] : null;
+      if (place) {
+        const f: GeoJSON.Feature = {
+          type: "Feature",
+          properties: {
+            index: index,
+            place_id: place.id,
+            description: place.name,
+            category: place.category,
+          },
+          geometry: {
+            type: "Point",
+            coordinates: [place.lon || 0, place.lat || 0],
+          },
+        };
+        features = [f];
+      }
+    }
+    if (!map.current.getSource("selectedPlace")) {
+      map.current.addSource("selectedPlace", {
+        type: "geojson",
+      });
+      map.current.addLayer({
+        id: "selectedPlace",
+        type: "circle",
+        source: "selectedPlace",
+        layout: {},
+        paint: {
+          "circle-radius": 14,
+          "circle-color": "black",
+          "circle-stroke-width": 2,
+          "circle-opacity": 0,
+        },
+      });
+    }
+    (map.current.getSource("selectedPlace") as GeoJSONSource)?.setData({
+      type: "FeatureCollection",
+      features: features,
+    });
+  }, [selectedPlaceIndex, map]);
 
   function generateMarkers() {
     if (!map.current) return;
@@ -200,13 +254,11 @@ export default function Bakeries() {
       paint: {
         "circle-radius": [
           "match",
-          ["get", "category"],
-          "BAKERY",
+          ["get", "selected"],
+          "false",
+          6,
+          "true",
           12,
-          "MURAL",
-          6,
-          "ART",
-          6,
           6,
         ],
         "circle-color": [
@@ -228,7 +280,14 @@ export default function Bakeries() {
         const place_id = features[0]?.properties?.place_id;
         const index = features[0]?.properties?.index;
         setSelectedPlaceIndex(index);
-
+        map.current?.setFeatureState(
+          {
+            source: "places",
+            sourceLayer: "places",
+            id: features[0]?.id,
+          },
+          { selected: "true" }
+        );
         /*const map = getRefs();
         const node = map.get(place_id);
         node?.scrollIntoView({
