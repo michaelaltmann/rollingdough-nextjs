@@ -26,7 +26,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 mapboxgl.accessToken =
   "pk.eyJ1IjoibWFsdG1hbm4iLCJhIjoiQjgzZTEyNCJ9.0_UJWIO6Up0HkMQajYj6Ew";
 
-import useEmblaCarousel from "embla-carousel-react";
+import useEmblaCarousel, { EmblaCarouselType } from "embla-carousel-react";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 export default function Bakeries() {
   const { data: places } = usePlace().findMany({
@@ -46,13 +46,16 @@ export default function Bakeries() {
   const [lng, setLng] = useState(-93.26);
   const [lat, setLat] = useState(44.95);
   const refs = useRef<Map<string, any> | null>(null);
-  const [emblaRef, emblaApi] = useEmblaCarousel();
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
 
-  const onSelect = useCallback((emblaApi, eventName: string) => {
-    console.log(`Embla just triggered ${eventName}!`);
-    const indexes: number[] = emblaApi.slidesInView();
-    setSelectedPlaceIndex(indexes[0]);
-  }, []);
+  const onSelect = useCallback(
+    (emblaApi: EmblaCarouselType, eventName: string) => {
+      console.log(`Embla just triggered ${eventName}!`);
+      const indexes: number[] = emblaApi.slidesInView();
+      if (indexes[0] != undefined) setSelectedPlaceIndex(indexes[0]);
+    },
+    []
+  );
 
   useEffect(() => {
     if (emblaApi) emblaApi.on("select", onSelect);
