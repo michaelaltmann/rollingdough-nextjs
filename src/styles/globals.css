@@ -15,10 +15,20 @@ a {
   box-sizing: border-box;
 }
 .embla {
+  --slide-spacing: 1rem;
+  --slide-size: 50%;
+  --slide-height: 19rem;
+  padding: 1.6rem;
+}
+.embla__viewport {
   overflow: hidden;
 }
+
 .embla__container {
+  backface-visibility: hidden;
   display: flex;
+  touch-action: pan-y;
+  margin-left: calc(var(--slide-spacing) * -1);
 }
 .embla__slide {
   flex: 0 0 100%;

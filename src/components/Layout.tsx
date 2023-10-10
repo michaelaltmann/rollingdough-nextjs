@@ -16,13 +16,13 @@ function Header() {
             href="/bakeries"
             sx={{
               mr: 2,
-              display: { xs: "none", md: "flex" },
+              display: "flex",
               fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
             }}
           >
-            Bakeries
+            Rolling Dough
           </Typography>
         </Toolbar>
       </Container>

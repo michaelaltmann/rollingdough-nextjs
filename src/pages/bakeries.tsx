@@ -50,9 +50,7 @@ export default function Bakeries() {
 
   const onSelect = useCallback(
     (emblaApi: EmblaCarouselType, eventName: string) => {
-      console.log(`Embla just triggered ${eventName}!`);
-      const indexes: number[] = emblaApi.slidesInView();
-      if (indexes[0] != undefined) setSelectedPlaceIndex(indexes[0]);
+      setSelectedPlaceIndex(emblaApi.selectedScrollSnap());
     },
     []
   );
@@ -62,7 +60,6 @@ export default function Bakeries() {
   }, [emblaApi, onSelect]);
 
   const generateTripPath = React.useCallback(async () => {
-    console.log(`trip places ${JSON.stringify(tripPlaces)}`);
     var coordinates;
     if (tripPlaces && tripPlaces.length > 1) {
       const coords = tripPlaces
@@ -174,32 +171,13 @@ export default function Bakeries() {
         },
       });
     }
-    (map.current.getSource("selectedPlace") as GeoJSONSource)?.setData({
-      type: "FeatureCollection",
-      features: features,
-    });
-  }, [selectedPlaceIndex, map]);
-
-  function generateMarkers() {
-    if (!map.current) return;
-    if (!places) return;
-
-    for (const place of places) {
-      //      console.log(`${place.id} ${place.lat || ""} ${place.lon || ""}`);
-      if (place.lat != null && place.lon != null) {
-        const popUp = new Popup({ closeButton: false, anchor: "left" }).setHTML(
-          `<div class="popup">${place.name}</div>`
-        );
-        new mapboxgl.Marker({
-          color: "#000000",
-          scale: 0.7,
-        })
-          .setLngLat([place.lon, place.lat])
-          .setPopup(popUp)
-          .addTo(map.current);
-      }
+    if (features.length) {
+      (map.current.getSource("selectedPlace") as GeoJSONSource)?.setData({
+        type: "FeatureCollection",
+        features: features,
+      });
     }
-  }
+  }, [selectedPlaceIndex, map]);
   function toggleTripPlace(place: Place) {
     const index = tripPlaces.indexOf(place);
     if (index >= 0) {
@@ -280,24 +258,8 @@ export default function Bakeries() {
     map.current.on("click", "places", (e) => {
       const features = e.features;
       if (features) {
-        const place_id = features[0]?.properties?.place_id;
         const index = features[0]?.properties?.index;
         setSelectedPlaceIndex(index);
-        map.current?.setFeatureState(
-          {
-            source: "places",
-            sourceLayer: "places",
-            id: features[0]?.id,
-          },
-          { selected: "true" }
-        );
-        /*const map = getRefs();
-        const node = map.get(place_id);
-        node?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-        */
       }
     });
   }
@@ -367,11 +329,13 @@ export default function Bakeries() {
   }
 
   const carouselFragment = (
-    <div className="embla" ref={emblaRef}>
-      <div className="embla__container">
-        {(places || []).map((bakery, i) => {
-          return buildSlide(bakery, i);
-        })}
+    <div className="embla">
+      <div className="embla__viewport" ref={emblaRef}>
+        <div className="embla__container">
+          {(places || []).map((bakery, i) => {
+            return buildSlide(bakery, i);
+          })}
+        </div>
       </div>
     </div>
   );
