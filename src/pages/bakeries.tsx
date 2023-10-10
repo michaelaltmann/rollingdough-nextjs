@@ -345,7 +345,7 @@ export default function Bakeries() {
         <div
           id="mapcontainer"
           ref={mapContainer}
-          style={{ height: "350px", width: "100%" }}
+          style={{ height: "320px", width: "100%" }}
         />
 
         <div>{carouselFragment}</div>
