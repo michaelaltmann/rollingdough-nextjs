@@ -272,7 +272,8 @@ export default function Bakeries() {
           flex: "0 0 100%",
           minWidth: 0,
           width: "100%",
-          height: "350px",
+          maxWidth: "480px",
+          height: "300px",
         }}
         ref={(node) => {
           const map = getRefs();
@@ -290,7 +291,7 @@ export default function Bakeries() {
         />
         <CardContent>
           {" "}
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="div">
             {tripPlaces.includes(bakery) ? (
               <Button size="small">
                 <HighlightOffOutlinedIcon
