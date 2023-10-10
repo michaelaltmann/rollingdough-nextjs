@@ -43,7 +43,7 @@ export default function Bakeries() {
   );
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [lng, setLng] = useState(-93.26);
+  const [lng, setLng] = useState(-93.285);
   const [lat, setLat] = useState(44.95);
   const refs = useRef<Map<string, any> | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
@@ -119,7 +119,7 @@ export default function Bakeries() {
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v12",
       center: [lng, lat],
-      zoom: 12,
+      zoom: 11,
     });
     map.current.on("load", () => generateLayer());
     return () => {
@@ -138,6 +138,7 @@ export default function Bakeries() {
       const index = selectedPlaceIndex;
       const place = places ? places[index] : null;
       if (place) {
+        map.current.panTo([place.lon || 0, place.lat || 0]);
         const f: GeoJSON.Feature = {
           type: "Feature",
           properties: {
@@ -270,10 +271,8 @@ export default function Bakeries() {
         sx={{
           flex: "0 0 100%",
           minWidth: 0,
-          width: "270px",
-          height: "380px",
-          borderColor: selectedPlaceIndex == i ? "gray" : "white",
-          borderStyle: "solid",
+          width: "100%",
+          height: "350px",
         }}
         ref={(node) => {
           const map = getRefs();
@@ -285,13 +284,24 @@ export default function Bakeries() {
         }}
       >
         <CardMedia
-          sx={{ height: 200, width: 360 }}
+          sx={{ height: 200, width: "100%" }}
           image={bakery.placeImage[0]?.url || ""}
           title="bakery item"
         />
         <CardContent>
           {" "}
           <Typography gutterBottom variant="h5" component="div">
+            {tripPlaces.includes(bakery) ? (
+              <Button size="small">
+                <HighlightOffOutlinedIcon
+                  onClick={() => toggleTripPlace(bakery)}
+                />{" "}
+              </Button>
+            ) : (
+              <Button>
+                <AddCircleOutlineIcon onClick={() => toggleTripPlace(bakery)} />
+              </Button>
+            )}
             {bakery.name}
           </Typography>
           <Typography
@@ -311,19 +321,7 @@ export default function Bakeries() {
             {bakery.description}
           </Typography>
         </CardContent>
-        <CardActions>
-          {tripPlaces.includes(bakery) ? (
-            <Button size="small">
-              <HighlightOffOutlinedIcon
-                onClick={() => toggleTripPlace(bakery)}
-              />{" "}
-            </Button>
-          ) : (
-            <Button>
-              <AddCircleOutlineIcon onClick={() => toggleTripPlace(bakery)} />
-            </Button>
-          )}
-        </CardActions>
+        <CardActions></CardActions>
       </Card>
     );
   }
