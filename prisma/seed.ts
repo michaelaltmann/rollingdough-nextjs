@@ -36,7 +36,7 @@ async function main() {
     {
       id: "patisserie46",
       name: "Patisserie 46",
-      address: "4552 Grand Ave S, Minneapolis, MN 55419",
+      address: "4552 Grand Ave S",
       lat: 44.91976,
       lon: -93.284438,
       category: "BAKERY",
@@ -50,7 +50,7 @@ async function main() {
     {
       id: "turtle_bread_lh",
       name: "Turtle Bead - Linden Hills",
-      address: "3421 W 44th St, Minneapolis, MN 55410",
+      address: "3421 W 44th St",
       lat: 44.923264,
       lon: -93.323866,
       category: "BAKERY",
@@ -64,7 +64,7 @@ async function main() {
     {
       id: "great_harvest_lh",
       name: "Great Harvest - Linden Hills",
-      address: "3421 W 44th St, Minneapolis, MN 55410",
+      address: "3421 W 44th St",
       lat: 44.924024,
       lon: -93.315201,
       category: "BAKERY",
@@ -78,7 +78,7 @@ async function main() {
     {
       id: "bakers_wife",
       name: "Baker's Wife",
-      address: "4200 28th Ave S, Minneapolis, MN 55406",
+      address: "4200 28th Ave S",
       lat: 44.926748,
       lon: -93.232134,
       category: "BAKERY",
@@ -92,7 +92,7 @@ async function main() {
     {
       id: "savory_bake_house",
       name: "Savory Bake House",
-      address: "3008 36th Ave S, Minneapolis, MN 55406",
+      address: "3008 36th Ave S",
       lat: 44.948108,
       lon: -93.220398,
       category: "BAKERY",
@@ -106,7 +106,7 @@ async function main() {
     {
       id: "laune_bread",
       name: "Laune Bread",
-      address: "3605 E Lake St, Minneapolis, MN 55406",
+      address: "3605 E Lake St",
       lat: 44.94837,
       lon: -93.220058,
       category: "BAKERY",
@@ -121,7 +121,7 @@ async function main() {
     {
       id: "bryant_square_park",
       name: "Bryant Square Park",
-      address: "3101 Bryant Ave S, Minneapolis, MN 55408",
+      address: "3101 Bryant Ave S",
       lat: 44.946161988128104,
       lon: -93.29042751845597,
       category: "MURAL",
@@ -133,23 +133,9 @@ async function main() {
       },
     },
     {
-      id: "john_lewis",
-      name: "VOTE - John Lewis",
-      address: "3101 Bryant Ave S, Minneapolis, MN 55408",
-      lat: 44.939408,
-      lon: -93.252603,
-      category: "MURAL",
-      description: "VOTE",
-      placeImage: {
-        create: {
-          url: "https://flic.kr/p/2oSGiQR",
-        },
-      },
-    },
-    {
       id: "what_will_you_do",
       name: "What Will You Do?",
-      address: "3101 Bryant Ave S, Minneapolis, MN 55408",
+      address: "3101 Bryant Ave S",
       lat: 44.9556167,
       lon: -93.2772139,
       category: "MURAL",
@@ -162,8 +148,8 @@ async function main() {
     },
     {
       id: "lyndale_park_rose_garden",
-      name: "Lyndale Park Rose Garden",
-      address: "4124 Roseway Rd, Minneapolis, MN 55409",
+      name: "Rose Garden",
+      address: "4124 Roseway Rd",
       lat: 44.927341526203236,
       lon: -93.29591834402862,
       category: "ART",
@@ -172,7 +158,7 @@ async function main() {
     {
       id: "turtle_bread_chicago",
       name: "Turtle Bread - Chicago Ave",
-      address: "4762 Chicago Ave, Minneapolis, Minnesota 55407",
+      address: "4762 Chicago Ave",
       lat: 44.91626633997229,
       lon: -93.26264025220873,
       category: "BAKERY",
@@ -188,7 +174,7 @@ async function main() {
     {
       id: "turtle_bread_44",
       name: "Turtle Bread - 44th St",
-      address: "3421 W 44th St, Minneapolis, Minnesota 55410",
+      address: "3421 W 44th St",
       lat: 44.923125,
       lon: -93.323821,
       category: "BAKERY",
@@ -204,7 +190,7 @@ async function main() {
     {
       id: "cafe_ceres",
       name: "Cafe Ceres",
-      address: "3509 W 44th St, Minneapolis, Minnesota 55406",
+      address: "3509 W 44th St",
       lat: 44.922892,
       lon: -93.324326,
       category: "BAKERY",
@@ -225,7 +211,7 @@ async function main() {
       lon: -93.25260277777778,
       placeImage: {
         create: {
-          url: "https://flic.kr/p/2oSGiQR",
+          url: "/images/art/IMG_4942.JPG",
         },
       },
     },

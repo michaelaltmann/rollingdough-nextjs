@@ -284,35 +284,34 @@ export default function Bakeries() {
           }
         }}
       >
+        <Typography gutterBottom variant="h6" component="span">
+          <Button sx={{ minWidth: "24px", padding: 0, marginLeft: "16px" }}>
+            {tripPlaces.includes(bakery) ? (
+              <HighlightOffOutlinedIcon
+                onClick={() => toggleTripPlace(bakery)}
+              />
+            ) : (
+              <AddCircleOutlineIcon onClick={() => toggleTripPlace(bakery)} />
+            )}
+          </Button>
+
+          {bakery.name}
+        </Typography>
+        {" | "}
+        <Typography
+          gutterBottom
+          variant="body2"
+          color="text.primary"
+          component="span"
+        >
+          {bakery.address}
+        </Typography>
         <CardMedia
           sx={{ height: 200, width: "100%" }}
           image={bakery.placeImage[0]?.url || ""}
           title="bakery item"
         />
         <CardContent>
-          {" "}
-          <Typography gutterBottom variant="h6" component="div">
-            {tripPlaces.includes(bakery) ? (
-              <Button size="small">
-                <HighlightOffOutlinedIcon
-                  onClick={() => toggleTripPlace(bakery)}
-                />{" "}
-              </Button>
-            ) : (
-              <Button>
-                <AddCircleOutlineIcon onClick={() => toggleTripPlace(bakery)} />
-              </Button>
-            )}
-            {bakery.name}
-          </Typography>
-          <Typography
-            gutterBottom
-            variant="body2"
-            color="text.primary"
-            component="div"
-          >
-            {bakery.address}
-          </Typography>
           <Typography
             gutterBottom
             variant="body2"
