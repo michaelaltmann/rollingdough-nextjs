@@ -142,7 +142,7 @@ async function main() {
       description: "What will you do with your one wild and precious life?",
       placeImage: {
         create: {
-          url: "https://flic.kr/p/2oSJRbV",
+          url: "/images/art/IMG_5339.jpeg",
         },
       },
     },
@@ -202,6 +202,21 @@ async function main() {
       },
     },
     {
+      id: "atuva",
+      name: "Atuva Bakery",
+      address: "3509 W 44th St",
+      lat: 44.934,
+      lon: -93.232,
+      category: "BAKERY",
+      description: "",
+      placeImage: {
+        create: {
+          url: "/images/bakery/IMG_8209.jpeg",
+        },
+      },
+    },
+
+    {
       id: "IMG_4942",
       name: "VOTE: John Louis",
       address: "",
@@ -218,7 +233,7 @@ async function main() {
     {
       id: "IMG_5068",
       name: "IMG_5068",
-      address: "",
+      address: "End Gun Violence",
       description: "",
       category: "ART",
       lat: 44.99939722222222,
@@ -259,7 +274,7 @@ async function main() {
     },
     {
       id: "IMG_5075",
-      name: "IMG_5075",
+      name: "Robert's Shoes Black Daze",
       address: "",
       description: "",
       category: "ART",
@@ -287,7 +302,7 @@ async function main() {
     },
     {
       id: "IMG_7998",
-      name: "IMG_7998",
+      name: "Royal Priesthood",
       address: "",
       description: "",
       category: "ART",
@@ -329,7 +344,7 @@ async function main() {
     },
     {
       id: "IMG_8007",
-      name: "IMG_8007",
+      name: "Art House",
       address: "",
       description: "",
       category: "ART",
@@ -343,7 +358,7 @@ async function main() {
     },
     {
       id: "IMG_8008",
-      name: "IMG_8008",
+      name: "Crossroads",
       address: "",
       description: "",
       category: "ART",
@@ -399,7 +414,7 @@ async function main() {
     },
     {
       id: "IMG_8017",
-      name: "IMG_8017",
+      name: "Space Dreams",
       address: "",
       description: "",
       category: "ART",
