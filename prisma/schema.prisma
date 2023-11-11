@@ -18,6 +18,12 @@ enum PlaceCategory {
     ART
 }
 
+enum PlaceGroup {
+    NORTH
+    SOUTH
+    EXTRA
+}
+
 /// @@allow('all', true)
 model Place {
     id String @id() @default(cuid())
@@ -26,6 +32,7 @@ model Place {
     phone String?
     description String
     category PlaceCategory
+    grouping PlaceGroup
     image String?
     lat Float?
     lon Float?

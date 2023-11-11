@@ -25,6 +25,7 @@ model Place {
     phone String?
     description String
     category PlaceCategory
+    grouping PlaceGroup
     image String?
     lat Float?
     lon Float?
@@ -37,6 +38,12 @@ enum PlaceCategory {
   BAKERY
   MURAL
   ART
+}
+
+enum PlaceGroup {
+    NORTH
+    SOUTH
+    EXTRA
 }
 
 model PlaceImage {

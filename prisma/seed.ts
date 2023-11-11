@@ -12,6 +12,7 @@ async function main() {
       lat: 44.949411,
       lon: -93.3203,
       category: "BAKERY",
+      grouping: "SOUTH",
       description: "Love the ginger scones",
       placeImage: {
         create: {
@@ -26,6 +27,7 @@ async function main() {
       lat: 44.94497704738643,
       lon: -93.29794673789111,
       category: "BAKERY",
+      grouping: "SOUTH",
       description: "Wide range of baked goods",
       placeImage: {
         create: {
@@ -40,6 +42,7 @@ async function main() {
       lat: 44.91976,
       lon: -93.284438,
       category: "BAKERY",
+      grouping: "SOUTH",
       description: "Wide range of baked goods",
       placeImage: {
         create: {
@@ -54,6 +57,7 @@ async function main() {
       lat: 44.923264,
       lon: -93.323866,
       category: "BAKERY",
+      grouping: "EXTRA",
       description: "Wide range of baked goods",
       placeImage: {
         create: {
@@ -68,6 +72,7 @@ async function main() {
       lat: 44.924024,
       lon: -93.315201,
       category: "BAKERY",
+      grouping: "EXTRA",
       description: "Franchise, but good",
       placeImage: {
         create: {
@@ -82,6 +87,7 @@ async function main() {
       lat: 44.926748,
       lon: -93.232134,
       category: "BAKERY",
+      grouping: "EXTRA",
       description: "Traditional",
       placeImage: {
         create: {
@@ -96,6 +102,7 @@ async function main() {
       lat: 44.948108,
       lon: -93.220398,
       category: "BAKERY",
+      grouping: "SOUTH",
       description: "Savory pies and turnovers",
       placeImage: {
         create: {
@@ -110,6 +117,7 @@ async function main() {
       lat: 44.94837,
       lon: -93.220058,
       category: "BAKERY",
+      grouping: "SOUTH",
       description: "European, with an emphasis on whole grains",
       placeImage: {
         create: {
@@ -125,6 +133,7 @@ async function main() {
       lat: 44.946161988128104,
       lon: -93.29042751845597,
       category: "MURAL",
+      grouping: "SOUTH",
       description: "Mirrored mosaic",
       placeImage: {
         create: {
@@ -139,6 +148,7 @@ async function main() {
       lat: 44.9556167,
       lon: -93.2772139,
       category: "MURAL",
+      grouping: "SOUTH",
       description: "What will you do with your one wild and precious life?",
       placeImage: {
         create: {
@@ -153,6 +163,7 @@ async function main() {
       lat: 44.927341526203236,
       lon: -93.29591834402862,
       category: "ART",
+      grouping: "SOUTH",
       description: "Rose garden, Cherry blossoms, and Japanese Rock Garden",
     },
     {
@@ -162,22 +173,7 @@ async function main() {
       lat: 44.91626633997229,
       lon: -93.26264025220873,
       category: "BAKERY",
-      description:
-        "Large space to sit and enjoy baked goods, sandwiches and soups.",
-      placeImage: {
-        create: {
-          url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
-        },
-      },
-    },
-
-    {
-      id: "turtle_bread_44",
-      name: "Turtle Bread - 44th St",
-      address: "3421 W 44th St",
-      lat: 44.923125,
-      lon: -93.323821,
-      category: "BAKERY",
+      grouping: "SOUTH",
       description:
         "Large space to sit and enjoy baked goods, sandwiches and soups.",
       placeImage: {
@@ -194,6 +190,7 @@ async function main() {
       lat: 44.922892,
       lon: -93.324326,
       category: "BAKERY",
+      grouping: "SOUTH",
       description: "",
       placeImage: {
         create: {
@@ -208,6 +205,7 @@ async function main() {
       lat: 44.934,
       lon: -93.232,
       category: "BAKERY",
+      grouping: "SOUTH",
       description: "",
       placeImage: {
         create: {
@@ -222,6 +220,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "SOUTH",
       lat: 44.93940833333333,
       lon: -93.25260277777778,
       placeImage: {
@@ -236,6 +235,7 @@ async function main() {
       address: "End Gun Violence",
       description: "",
       category: "ART",
+      grouping: "NORTH",
       lat: 44.99939722222222,
       lon: -93.29164166666666,
       placeImage: {
@@ -250,6 +250,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "NORTH",
       lat: 44.958152777777784,
       lon: -93.27788611111112,
       placeImage: {
@@ -264,6 +265,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "NORTH",
       lat: 44.95928611111111,
       lon: -93.27812222222222,
       placeImage: {
@@ -278,6 +280,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "SOUTH",
       lat: 44.948477777777775,
       lon: -93.26288611111111,
       placeImage: {
@@ -292,6 +295,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "NORTH",
       lat: 44.999225,
       lon: -93.28678888888889,
       placeImage: {
@@ -306,6 +310,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "NORTH",
       lat: 44.999608333333335,
       lon: -93.28843611111111,
       placeImage: {
@@ -320,6 +325,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "NORTH",
       lat: 44.99914444444445,
       lon: -93.29210555555555,
       placeImage: {
@@ -334,6 +340,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "NORTH",
       lat: 44.9994,
       lon: -93.2944111111111,
       placeImage: {
@@ -348,6 +355,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "SOUTH",
       lat: 44.93172777777777,
       lon: -93.2856361111111,
       placeImage: {
@@ -362,6 +370,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "SOUTH",
       lat: 44.93430833333333,
       lon: -93.27884722222223,
       placeImage: {
@@ -376,6 +385,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "SOUTH",
       lat: 44.950383333333335,
       lon: -93.28337222222223,
       placeImage: {
@@ -390,6 +400,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "EXTRA",
       lat: 44.950050000000005,
       lon: -93.2863611111111,
       placeImage: {
@@ -404,6 +415,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "EXTRA",
       lat: 44.94990277777777,
       lon: -93.28610277777777,
       placeImage: {
@@ -418,6 +430,7 @@ async function main() {
       address: "",
       description: "",
       category: "ART",
+      grouping: "SOUTH",
       lat: 44.948588888888885,
       lon: -93.2861638888889,
       placeImage: {
@@ -433,6 +446,7 @@ async function main() {
       description:
         "Old site of Sunrise Cyclery, where Jamie McDonald had the best place for used bikes and parts.",
       category: "ART",
+      grouping: "SOUTH",
       lat: 44.95092777777778,
       lon: -93.27931111111111,
       placeImage: {

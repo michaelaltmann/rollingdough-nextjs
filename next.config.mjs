@@ -20,11 +20,6 @@ const config = {
   },
   async redirects() {
     return [
-      {
-        source: '/',
-        destination: '/bakeries',
-        permanent: true,
-      },
     ]
   },
 };

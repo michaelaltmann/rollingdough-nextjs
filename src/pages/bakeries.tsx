@@ -13,14 +13,15 @@ import {
   Typography,
 } from "@mui/material";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
-import { Place } from "@prisma/client";
+import { Place, PlaceGroup } from "@prisma/client";
 import { PlaceImage } from "@prisma/client";
 import { usePlace } from "~/lib/hooks";
-import mapboxgl, { GeoJSONSource, MapMouseEvent } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl, { GeoJSONSource } from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { useRef, useState, useEffect, useCallback } from "react";
 import * as React from "react";
-import { Popup } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 mapboxgl.accessToken =
@@ -30,7 +31,7 @@ import useEmblaCarousel, { EmblaCarouselType } from "embla-carousel-react";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 export default function Bakeries() {
   const { data: places } = usePlace().findMany({
-    // where: { category: PlaceCategory.BAKERY },
+    where: { grouping: PlaceGroup.SOUTH },
     orderBy: [{ lon: "asc" }],
     include: {
       placeImage: true,
@@ -43,7 +44,7 @@ export default function Bakeries() {
   );
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [lng, setLng] = useState(-93.285);
+  const [lng, setLng] = useState(-93.27);
   const [lat, setLat] = useState(44.95);
   const refs = useRef<Map<string, any> | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
@@ -120,6 +121,7 @@ export default function Bakeries() {
       style: "mapbox://styles/mapbox/streets-v12",
       center: [lng, lat],
       zoom: 11,
+      dragPan: false,
     });
     map.current.on("load", () => generateLayer());
     return () => {
@@ -138,7 +140,7 @@ export default function Bakeries() {
       const index = selectedPlaceIndex;
       const place = places ? places[index] : null;
       if (place) {
-        map.current.panTo([place.lon || 0, place.lat || 0]);
+        //  map.current.panTo([place.lon || 0, place.lat || 0]);
         const f: GeoJSON.Feature = {
           type: "Feature",
           properties: {
@@ -238,7 +240,7 @@ export default function Bakeries() {
           "match",
           ["get", "selected"],
           "false",
-          6,
+          9,
           "true",
           12,
           6,
@@ -247,11 +249,11 @@ export default function Bakeries() {
           "match",
           ["get", "category"],
           "BAKERY",
-          "orange",
+          "brown",
           "MURAL",
-          "green",
+          "darkseagreen",
           "ART",
-          "purple",
+          "pink",
           "gray",
         ],
       },
@@ -263,6 +265,24 @@ export default function Bakeries() {
         setSelectedPlaceIndex(index);
       }
     });
+  }
+  function buildLoading() {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          alignContent: "center",
+        }}
+      >
+        <CircularProgress
+          sx={{
+            marginTop: "120px",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        />
+      </Box>
+    );
   }
   function buildSlide(bakery: Place & { placeImage: PlaceImage[] }, i: number) {
     return (
@@ -285,7 +305,14 @@ export default function Bakeries() {
         }}
       >
         <Typography gutterBottom variant="h6" component="span">
-          <Button sx={{ minWidth: "24px", padding: 0, marginLeft: "16px" }}>
+          <Button
+            sx={{
+              minWidth: "24px",
+              padding: 0,
+              marginLeft: "16px",
+              marginRight: "4px",
+            }}
+          >
             {tripPlaces.includes(bakery) ? (
               <HighlightOffOutlinedIcon
                 onClick={() => toggleTripPlace(bakery)}
@@ -351,6 +378,6 @@ export default function Bakeries() {
       </Stack>
     );
   else {
-    return <div>Loading ...</div>;
+    return buildLoading();
   }
 }
