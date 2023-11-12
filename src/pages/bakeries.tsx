@@ -190,7 +190,7 @@ export default function Bakeries() {
         features: features,
       });
     }
-  }, [selectedPlaceIndex, map]);
+  }, [selectedPlaceIndex, map, emblaApi, places]);
   function toggleTripPlace(place: Place) {
     const index = tripPlaces.indexOf(place);
     if (index >= 0) {
@@ -392,8 +392,8 @@ export default function Bakeries() {
 
         <div>{carouselFragment}</div>
         <div>
-          {instructions?.map((s) => (
-            <div>{s}</div>
+          {instructions?.map((s: String, i: number) => (
+            <div key={i.toString()}>{s}</div>
           ))}
         </div>
       </Stack>
