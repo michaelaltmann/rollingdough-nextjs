@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-image: linear-gradient(to bottom, #f9bb10, #96bc17);
+  background-image: linear-gradient(to bottom, #f8ecca, #96bc17);
 }
 
 .container {
@@ -53,11 +53,11 @@
   font-weight: 800;
   letter-spacing: -0.025em;
   margin: 0;
-  color: mediumblue;
+  color: #935116;
 }
 
 .subtitle {
-  color: blue;
+  color: #935116;
 }
 
 @media (min-width: 640px) {

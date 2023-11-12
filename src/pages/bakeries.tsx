@@ -48,7 +48,9 @@ export default function Bakeries() {
   const [lat, setLat] = useState(44.95);
   const refs = useRef<Map<string, any> | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
-
+  const [instructions, setInstructions] = useState<Array<String> | undefined>([
+    "Instructions will appear here",
+  ]);
   const onSelect = useCallback(
     (emblaApi: EmblaCarouselType, eventName: string) => {
       setSelectedPlaceIndex(emblaApi.selectedScrollSnap());
@@ -69,7 +71,10 @@ export default function Bakeries() {
       const url = `https://api.mapbox.com/directions/v5/mapbox/cycling/${coords}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`;
 
       type JSONResponse = {
-        routes: Array<{ geometry: { coordinates: Array<number[]> } }>;
+        routes: Array<{
+          geometry: { coordinates: Array<number[]> };
+          legs: Array<{ steps: Array<{ maneuver: { instruction: String } }> }>;
+        }>;
       };
 
       const { routes }: JSONResponse = await typedRequest<JSONResponse>(url, {
@@ -77,6 +82,10 @@ export default function Bakeries() {
       });
 
       coordinates = routes[0]?.geometry?.coordinates;
+      const instructionTexts = routes[0]?.legs[0]?.steps.map(
+        (x) => x.maneuver.instruction
+      );
+      setInstructions(instructionTexts);
     } else {
       coordinates = [];
     }
@@ -109,6 +118,7 @@ export default function Bakeries() {
 
     // if the route already exists on the map, we'll reset it using setData
   }, [tripPlaces]);
+
   function getRefs() {
     if (!refs.current) refs.current = new Map();
     return refs.current;
@@ -203,7 +213,9 @@ export default function Bakeries() {
 
   function generateLayer() {
     if (!map.current) return;
+    if (!map.current.loaded()) return;
     if (!places) return;
+
     const features = places
       .filter((place: Place) => place.lat && place.lon)
       .map((place: Place, index: number) => {
@@ -249,7 +261,7 @@ export default function Bakeries() {
           "match",
           ["get", "category"],
           "BAKERY",
-          "brown",
+          "#935116",
           "MURAL",
           "darkseagreen",
           "ART",
@@ -294,6 +306,10 @@ export default function Bakeries() {
           width: "100%",
           maxWidth: "480px",
           height: "300px",
+          borderColor: "gray",
+          borderWidth: 1,
+          borderStyle: "solid",
+          marginRight: 1,
         }}
         ref={(node) => {
           const map = getRefs();
@@ -375,6 +391,11 @@ export default function Bakeries() {
         />
 
         <div>{carouselFragment}</div>
+        <div>
+          {instructions?.map((s) => (
+            <div>{s}</div>
+          ))}
+        </div>
       </Stack>
     );
   else {
