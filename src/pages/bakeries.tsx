@@ -48,9 +48,9 @@ export default function Bakeries() {
   const [lat, setLat] = useState(44.95);
   const refs = useRef<Map<string, any> | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
-  const [instructions, setInstructions] = useState<Array<String> | undefined>([
-    "Instructions will appear here",
-  ]);
+  const [instructions, setInstructions] = useState<
+    Array<Array<String>> | undefined
+  >([["Instructions will appear here"]]);
   const onSelect = useCallback(
     (emblaApi: EmblaCarouselType, eventName: string) => {
       setSelectedPlaceIndex(emblaApi.selectedScrollSnap());
@@ -82,8 +82,8 @@ export default function Bakeries() {
       });
 
       coordinates = routes[0]?.geometry?.coordinates;
-      const instructionTexts = routes[0]?.legs[0]?.steps.map(
-        (x) => x.maneuver.instruction
+      const instructionTexts = routes[0]?.legs?.map((leg) =>
+        leg.steps.map((x) => x.maneuver.instruction)
       );
       setInstructions(instructionTexts);
     } else {
@@ -144,6 +144,7 @@ export default function Bakeries() {
 
   useEffect(() => {
     if (!map.current) return;
+    if (!map.current.loaded()) return;
     let features: Feature<Geometry, GeoJsonProperties>[] = [];
     if (selectedPlaceIndex != null) {
       emblaApi?.scrollTo(selectedPlaceIndex);
@@ -392,8 +393,14 @@ export default function Bakeries() {
 
         <div>{carouselFragment}</div>
         <div>
-          {instructions?.map((s: String, i: number) => (
-            <div key={i.toString()}>{s}</div>
+          {instructions?.map((leg: Array<String>, i: number) => (
+            <div key={i}>
+              <ul>
+                {leg?.map((s: String, j: number) => (
+                  <li key={j}> {s}</li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </Stack>
