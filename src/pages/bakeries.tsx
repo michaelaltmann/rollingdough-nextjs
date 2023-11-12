@@ -45,7 +45,7 @@ export default function Bakeries() {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const [lng, setLng] = useState(-93.27);
-  const [lat, setLat] = useState(44.95);
+  const [lat, setLat] = useState(44.94);
   const refs = useRef<Map<string, any> | null>(null);
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
   const [instructions, setInstructions] = useState<
@@ -388,7 +388,7 @@ export default function Bakeries() {
         <div
           id="mapcontainer"
           ref={mapContainer}
-          style={{ height: "320px", width: "100%" }}
+          style={{ height: "230px", width: "100%" }}
         />
 
         <div>{carouselFragment}</div>
