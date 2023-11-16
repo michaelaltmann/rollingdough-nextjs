@@ -50,7 +50,7 @@ export default function Bakeries() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
   const [instructions, setInstructions] = useState<
     Array<Array<String>> | undefined
-  >([["Instructions will appear here"]]);
+  >([["Route Instructions:"]]);
   const onSelect = useCallback(
     (emblaApi: EmblaCarouselType, eventName: string) => {
       setSelectedPlaceIndex(emblaApi.selectedScrollSnap());
@@ -405,6 +405,7 @@ export default function Bakeries() {
 
         <div>{carouselFragment}</div>
         <div>
+          <h3>{tripPlaces[0]?.name}</h3>
           {instructions?.map((leg: Array<String>, i: number) => (
             <div key={i}>
               <ul>
@@ -412,6 +413,7 @@ export default function Bakeries() {
                   <li key={j}> {s}</li>
                 ))}
               </ul>
+              <h3>{tripPlaces[i + 1]?.name}</h3>
             </div>
           ))}
         </div>
