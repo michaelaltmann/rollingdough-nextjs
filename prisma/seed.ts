@@ -46,7 +46,7 @@ async function main() {
       description: "Wide range of baked goods",
       placeImage: {
         create: {
-          url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
+          url: "/images/bakery/patisserie46Grand.jpeg",
         },
       },
     },
@@ -61,7 +61,7 @@ async function main() {
       description: "Wide range of baked goods",
       placeImage: {
         create: {
-          url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
+          url: "/images/bakeryTurtleBreadLH.jpeg",
         },
       },
     },
@@ -76,7 +76,7 @@ async function main() {
       description: "Franchise, but good",
       placeImage: {
         create: {
-          url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
+          url: "/images/bakery/GreatHarvestLH.jpeg",
         },
       },
     },
@@ -106,7 +106,7 @@ async function main() {
       description: "Savory pies and turnovers",
       placeImage: {
         create: {
-          url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
+          url: "/images/bakery/SavoryBakeHouse.jpeg",
         },
       },
     },
@@ -121,7 +121,7 @@ async function main() {
       description: "European, with an emphasis on whole grains",
       placeImage: {
         create: {
-          url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
+          url: "/images/bakery/Laune.jpeg",
         },
       },
     },
@@ -178,7 +178,7 @@ async function main() {
         "Large space to sit and enjoy baked goods, sandwiches and soups.",
       placeImage: {
         create: {
-          url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
+          url: "/images/bakery/TurtleBreadChicago.jpeg",
         },
       },
     },
@@ -194,7 +194,7 @@ async function main() {
       description: "",
       placeImage: {
         create: {
-          url: "https://s3-media0.fl.yelpcdn.com/bphoto/FNqhZsLFJ83jWCUR5a0MGg/o.jpg",
+          url: "/images/bakery/CafeCeres.jpeg",
         },
       },
     },
