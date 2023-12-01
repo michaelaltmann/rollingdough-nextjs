@@ -165,6 +165,11 @@ async function main() {
       category: "ART",
       grouping: "SOUTH",
       description: "Rose garden, Cherry blossoms, and Japanese Rock Garden",
+      placeImage: {
+        create: {
+          url: "/images/art/RoseGarden.jpeg",
+        },
+      },
     },
     {
       id: "turtle_bread_chicago",
