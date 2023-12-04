@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import HighlightOffOutlinedIcon from "@mui/icons-material/HighlightOffOutlined";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 
@@ -62,6 +63,27 @@ export default function Bakeries() {
     if (emblaApi) emblaApi.on("select", onSelect);
   }, [emblaApi, onSelect]);
 
+  function generateGoogleMapsUrl() {
+    function asLatLon(place: Place | undefined) {
+      if (place) {
+        return `${place.lat || 0},${place.lon || 0}`;
+      } else {
+        return "";
+      }
+    }
+    if (tripPlaces && tripPlaces.length > 1) {
+      const origin = asLatLon(tripPlaces[0]);
+      const destination = asLatLon(tripPlaces[tripPlaces.length - 1]);
+      const waypoints = tripPlaces
+        .slice(1, tripPlaces.length - 1)
+        .map((place) => asLatLon(place))
+        .join(";");
+      const url = `https://www.google.com/maps/dir/?api=1&travelmode=bicycling&origin=${origin}&destination=${destination}&waypoints=${waypoints}`;
+      return url;
+    } else {
+      return "";
+    }
+  }
   const generateTripPath = React.useCallback(async () => {
     var coordinates;
     if (tripPlaces && tripPlaces.length > 1) {
@@ -276,9 +298,9 @@ export default function Bakeries() {
           "BAKERY",
           "#935116",
           "MURAL",
-          "darkseagreen",
+          "#D88AD0",
           "ART",
-          "pink",
+          "#D88AD0",
           "gray",
         ],
       },
@@ -404,19 +426,28 @@ export default function Bakeries() {
         />
 
         <div>{carouselFragment}</div>
-        <div>
-          <h3>{tripPlaces[0]?.name}</h3>
-          {instructions?.map((leg: Array<String>, i: number) => (
-            <div key={i}>
-              <ul>
-                {leg?.map((s: String, j: number) => (
-                  <li key={j}> {s}</li>
-                ))}
-              </ul>
-              <h3>{tripPlaces[i + 1]?.name}</h3>
-            </div>
-          ))}
-        </div>
+        {tripPlaces.length > 1 && (
+          <div>
+            <Button
+              sx={{ fontSize: "large", borderStyle: "solid", borderWidth: 2 }}
+            >
+              <a target="_blank" href={generateGoogleMapsUrl()}>
+                Open in Maps <DirectionsBikeIcon />
+              </a>
+            </Button>
+            <h3>{tripPlaces[0]?.name}</h3>
+            {instructions?.map((leg: Array<String>, i: number) => (
+              <div key={i}>
+                <ul>
+                  {leg?.map((s: String, j: number) => (
+                    <li key={j}> {s}</li>
+                  ))}
+                </ul>
+                <h3>{tripPlaces[i + 1]?.name}</h3>
+              </div>
+            ))}
+          </div>
+        )}
       </Stack>
     );
   else {
