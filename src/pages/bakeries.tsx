@@ -52,6 +52,7 @@ export default function Bakeries() {
   const [instructions, setInstructions] = useState<
     Array<Array<String>> | undefined
   >([["Route Instructions:"]]);
+  const [tripDistance, setTripDistance] = useState(0);
   const onSelect = useCallback(
     (emblaApi: EmblaCarouselType, eventName: string) => {
       setSelectedPlaceIndex(emblaApi.selectedScrollSnap());
@@ -84,6 +85,7 @@ export default function Bakeries() {
       return "";
     }
   }
+
   const generateTripPath = React.useCallback(async () => {
     var coordinates;
     if (tripPlaces && tripPlaces.length > 1) {
@@ -94,6 +96,7 @@ export default function Bakeries() {
 
       type JSONResponse = {
         routes: Array<{
+          distance: number;
           geometry: { coordinates: Array<number[]> };
           legs: Array<{ steps: Array<{ maneuver: { instruction: String } }> }>;
         }>;
@@ -102,12 +105,13 @@ export default function Bakeries() {
       const { routes }: JSONResponse = await typedRequest<JSONResponse>(url, {
         method: "GET",
       });
-
-      coordinates = routes[0]?.geometry?.coordinates;
-      const instructionTexts = routes[0]?.legs?.map((leg) =>
+      const bestRoute = routes[0];
+      coordinates = bestRoute?.geometry?.coordinates;
+      const instructionTexts = bestRoute?.legs?.map((leg) =>
         leg.steps.map((x) => x.maneuver.instruction)
       );
       setInstructions(instructionTexts);
+      setTripDistance(bestRoute?.distance || 0);
     } else {
       coordinates = [];
     }
@@ -296,11 +300,11 @@ export default function Bakeries() {
           "match",
           ["get", "category"],
           "BAKERY",
-          "#935116",
+          "#B87116",
           "MURAL",
-          "#D88AD0",
+          "#D787CD",
           "ART",
-          "#D88AD0",
+          "#D787CD",
           "gray",
         ],
       },
@@ -415,16 +419,29 @@ export default function Bakeries() {
       </div>
     </div>
   );
-
+  const scones = Math.round(((tripDistance / 1000) * 30) / 50);
   if (places)
     return (
       <Stack direction="column">
-        <div
-          id="mapcontainer"
-          ref={mapContainer}
-          style={{ height: "230px", width: "100%" }}
-        />
-
+        <div>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              zIndex: 100,
+              color: "blue",
+              backgroundColor: "beige",
+            }}
+          >
+            Your ride will burn {scones} {scones == 1 ? "scone" : "scones"}
+          </div>
+          <div
+            id="mapcontainer"
+            ref={mapContainer}
+            style={{ height: "230px", width: "100%" }}
+          />
+        </div>
         <div>{carouselFragment}</div>
         {tripPlaces.length > 1 && (
           <div>
