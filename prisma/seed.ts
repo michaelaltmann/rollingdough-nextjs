@@ -28,7 +28,7 @@ async function main() {
       lon: -93.29794673789111,
       category: "BAKERY",
       grouping: "SOUTH",
-      description: "Wide range of baked goods",
+      description: "TC's flakiest croissants",
       placeImage: {
         create: {
           url: "https://i0.wp.com/www.twincities.com/wp-content/uploads/2020/01/BlackWalnutBakery11072019Ngolemontart.jpg?fit=780%2C9999px&ssl=1",
@@ -43,7 +43,7 @@ async function main() {
       lon: -93.284438,
       category: "BAKERY",
       grouping: "SOUTH",
-      description: "Wide range of baked goods",
+      description: "Amazing pastry shop included",
       placeImage: {
         create: {
           url: "/images/bakery/patisserie46Grand.jpeg",
@@ -58,7 +58,7 @@ async function main() {
       lon: -93.323866,
       category: "BAKERY",
       grouping: "EXTRA",
-      description: "Wide range of baked goods",
+      description: "Check out the cardamom bread",
       placeImage: {
         create: {
           url: "/images/bakeryTurtleBreadLH.jpeg",
@@ -196,7 +196,7 @@ async function main() {
       lon: -93.324326,
       category: "BAKERY",
       grouping: "SOUTH",
-      description: "",
+      description: "Classics with a Mediterranean twist",
       placeImage: {
         create: {
           url: "/images/bakery/CafeCeres.jpeg",

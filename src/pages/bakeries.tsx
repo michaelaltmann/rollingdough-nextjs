@@ -419,7 +419,11 @@ export default function Bakeries() {
       </div>
     </div>
   );
-  const scones = Math.round(((tripDistance / 1000) * 30) / 50);
+  const caloriesPerPastry = 50;
+  const caloriesPerKilometer = 30;
+  const scones = Math.round(
+    ((tripDistance / 1000) * caloriesPerKilometer) / caloriesPerPastry
+  );
   if (places)
     return (
       <Stack direction="column">
