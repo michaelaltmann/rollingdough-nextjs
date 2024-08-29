@@ -26,7 +26,7 @@ import * as React from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 mapboxgl.accessToken =
-  "pk.eyJ1IjoibWFsdG1hbm4iLCJhIjoiQjgzZTEyNCJ9.0_UJWIO6Up0HkMQajYj6Ew";
+  "pk.eyJ1IjoibWFsdG1hbm4iLCJhIjoiY20wZmY0eWJrMHZmdDJqcHIzZm1udHlucyJ9.SntRg7Qa2MckRngH_dD7hg";
 
 import useEmblaCarousel, { EmblaCarouselType } from "embla-carousel-react";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
